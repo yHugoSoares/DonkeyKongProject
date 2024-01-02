@@ -1,8 +1,9 @@
-module Mapa where
+module Maps where
+
 import Graphics.Gloss
 import Graphics.Gloss.Interface.Pure.Game
 import Graphics.Gloss.Data.Bitmap
---import Data.Struct
+--import DataStruct
 --import Maps
 
 --Datas do jogo
