@@ -2,7 +2,8 @@ module Gloss where
 
 import Graphics.Gloss
 import Graphics.Gloss.Interface.Pure.Game
-import Maps
+import DataStruct
+--import Maps
 
 type Estado = (Float, Float)
 
@@ -40,7 +41,7 @@ main = do
     play dm                             -- janela onde esta a decorrer
         black                           -- cor do fundo da janela
         fr                              -- framerate
-        (estadoGlossInicial (scale 0.15 0.15 mario))      -- estado inicial
+        (estadoGlossInicial (scale 0.15 0.15 mario))-- estado inicial
         desenhaEstadoGloss              -- desenha o estado do jogo
         reageEventoGloss                -- reage a um evento
         reageTempoGloss                 -- reage ao passar do tempo
