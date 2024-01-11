@@ -9,6 +9,9 @@ type Estado = (Float, Float)
 
 type EstadoGloss = (Estado, Picture)
 
+mov = 20 -- Velocidade do movimento do Mário
+jump = 40 -- valor de salto do Mário
+
 estadoInicial :: Estado
 estadoInicial = (0,0)
 
@@ -16,10 +19,12 @@ estadoGlossInicial :: Picture -> EstadoGloss
 estadoGlossInicial z = (estadoInicial, z)
 
 reageEventoGloss :: Event -> EstadoGloss -> EstadoGloss 
-reageEventoGloss (EventKey (SpecialKey KeyUp) Down _ _)        ((x,y), z) = ((x,y+5), z)
-reageEventoGloss (EventKey (SpecialKey KeyDown) Down _ _)      ((x,y), z) = ((x,y-5), z)
-reageEventoGloss (EventKey (SpecialKey KeyLeft) Down _ _)      ((x,y), z) = ((x-5,y), z)
-reageEventoGloss (EventKey (SpecialKey KeyRight) Down _ _)     ((x,y), z) = ((x+5,y), z)
+reageEventoGloss (EventKey (SpecialKey KeyUp) Down _ _)        ((x,y), z) = ((x,y+mov), z)
+reageEventoGloss (EventKey (SpecialKey KeyDown) Down _ _)      ((x,y), z) = ((x,y-mov), z)
+reageEventoGloss (EventKey (SpecialKey KeyLeft) Down _ _)      ((x,y), z) = ((x-mov,y), z)
+reageEventoGloss (EventKey (SpecialKey KeyRight) Down _ _)     ((x,y), z) = ((x+mov,y), z)
+reageEventoGloss (EventKey (SpecialKey KeySpace) Down _ _)     ((x,y), z) = ((x,y+jump), z)
+reageEventoGloss (EventKey (SpecialKey KeySpace) Up _ _)     ((x,y), z) = ((x,y-jump), z)
 reageEventoGloss _ s = s -- ignora qualquer outro evento
 
 reageTempoGloss :: Float -> EstadoGloss -> EstadoGloss 
