@@ -4,6 +4,7 @@ import Graphics.Gloss
 import Graphics.Gloss.Interface.Pure.Game
 import Graphics.Gloss.Data.Bitmap
 import DataStruct
+import Keyboard
 import qualified Data.Set as S
 import Maps
 
@@ -18,30 +19,24 @@ fr = 50
 dm :: Display
 dm = InWindow "Donkey Kong" (640, 640) (0, 0)
 
-type Estado = (Float, Float)
-type EstadoGloss = (Estado, [Picture], Jogador, Inimigo)
+type EstadoGloss = (Jogo, [Key], [Picture], Jogador, Inimigo)
 
-estadoInicial :: Estado
-estadoInicial = (0, 0)  
+estadoInicial :: Jogo
+estadoInicial = Jogo mapaGrande malvados [] mario  
 
 estadoGlossInicial :: [Picture] -> Jogador -> Inimigo -> EstadoGloss
-estadoGlossInicial z skin inimigo = (estadoInicial, z, skin, inimigo)
+estadoGlossInicial z skin inimigo = (estadoInicial,[], z, skin, inimigo)
 
 reageEventoGloss :: Event -> EstadoGloss -> EstadoGloss
-{-reageEventoGloss (EventKey (SpecialKey KeyUp) Down _ _) ((x, y), z) = ((x, y + mov), z)
-reageEventoGloss (EventKey (SpecialKey KeyUp) Up _ _) ((x, y), z) = ((x, y),z)
-reageEventoGloss (EventKey (SpecialKey KeyDown) Down _ _) ((x, y), z) = ((x, y - mov), z)
-reageEventoGloss (EventKey (SpecialKey KeyDown) Up _ _) ((x, y), z) = ((x, y),z)
-reageEventoGloss (EventKey (SpecialKey KeyLeft) Down _ _) ((x, y), z) = ((x - mov, y),z)
-reageEventoGloss (EventKey (SpecialKey KeyLeft) Up _ _) ((x, y), z) = ((x, y), z)
-reageEventoGloss (EventKey (SpecialKey KeyRight) Down _ _) ((x, y), z) = ((x + mov, y), z)
-reageEventoGloss (EventKey (SpecialKey KeySpace) Down _ _) ((x, y), z) = ((x, y + jump), z)
-reageEventoGloss (EventKey (SpecialKey KeySpace) Up _ _) ((x, y), z) = ((x, y - jump), z)-}
-reageEventoGloss _ s = s -- Ignora qualquer outro evento
+reageEventoGloss evento (estadoInicial,keys, z,skin, inimigo) = (estadoInicial, reactKey evento keys, z,skin, inimigo)
 
 
 desenhaEstadoGloss :: EstadoGloss -> Picture
-desenhaEstadoGloss ((x,y), z,skin, inimigo) = desenhaMapa z skin inimigo
+desenhaEstadoGloss (estadoInicial,keys, z,skin, inimigo) = desenhaMapa estadoInicial z skin inimigo
+
+
+atualizaEstado :: Float -> EstadoGloss -> EstadoGloss
+atualizaEstado n (estadoInicial,keys, z,skin, inimigo) = (aplicaListaKey keys estadoInicial, keys, z,skin, inimigo)
 
 carregaJogador :: IO[Picture]
 carregaJogador = do 
@@ -49,9 +44,6 @@ carregaJogador = do
                  martelo <- loadBMP "/home/henrique/Code/img/Hammer.bmp"
                  moeda <- loadBMP "/home/henrique/Code/img/Hammer.bmp"
                  return [mario]
-
-atualizaEstado :: Float -> EstadoGloss -> EstadoGloss
-atualizaEstado _ ((x, y), z,players, picm) = ((x, y), z,players, picm)
 
 main :: IO ()
 main = do

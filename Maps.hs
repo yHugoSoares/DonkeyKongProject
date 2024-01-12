@@ -52,9 +52,6 @@ displayMode :: Display
 displayMode = InWindow "Game" (640,640) (0,0)
 
 
-{-main :: IO()
-main = do loadIMG <- carregaImagens
-          display displayMode black (desenhaMapa loadIMG)-}
 
 mapaGrande :: Mapa
 mapaGrande =  Mapa ((0,0),Oeste) (0,0)
@@ -74,12 +71,12 @@ mapaGrande =  Mapa ((0,0),Oeste) (0,0)
                [Plataforma,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Escada,Vazio,Vazio,Vazio,Plataforma],
                [Plataforma,Plataforma,Plataforma,Plataforma,Plataforma,Plataforma,Plataforma,Plataforma,Plataforma,Plataforma,Plataforma,Plataforma,Plataforma,Plataforma,Plataforma]]
 
-desenhaMapa :: [Picture] -> Jogador -> Inimigo -> Picture
-desenhaMapa pics skin inimigo = translate (-120) (104) $ pictures (drawMap (mapaGrande,pics) (0,0) ++ [desenhaJogador mario skin] ++ desenhaInimigo malvados inimigo )
+desenhaMapa :: Jogo -> [Picture] -> Jogador -> Inimigo -> Picture
+desenhaMapa (Jogo mapa mal colec jog) pics skin inimigo = translate (-120) (104) $ pictures (drawMap (mapa,pics) (0,0) ++ [desenhaJogador jog skin] ++ desenhaInimigo mal inimigo )
 
 
 mario :: Personagem
-mario = Personagem 1 Jogador (20,-200) Leste (16,16) False False 1 0 (False,0)
+mario = Personagem 2 Jogador (20,-200) Leste (16,16) False False 1 0 (False,0)
 
 malvados :: [Personagem]
 malvados = [(Personagem 1 MacacoMalvado (100,20) Oeste (16,16) False False 1 0 (False,0)),(Personagem 1 Fantasma (100,-200) Oeste (16,16) False False 1 0 (False,0))]
