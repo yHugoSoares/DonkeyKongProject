@@ -3,8 +3,8 @@ module DataStruct where
 --Datas do Jogo
 data Mapa = Mapa (Posicao, Direcao) Posicao [[Bloco]]
 data Bloco = Escada | Plataforma | Alcapao | Vazio deriving (Show,Eq,Read)
-data Direcao = Norte | Sul | Leste | Oeste deriving Show
-type Posicao = (Double,Double)          --par ordenado que define (coluna,linha)
+data Direcao = Norte | Sul | Leste | Oeste deriving (Show,Eq)
+type Posicao = (Float,Float)          --par ordenado que define (coluna,linha)
 data Personagem = Personagem{   
 velocidade :: Velocidade                --Um vetor de velocidade normal
 , tipo :: Entidade                      --Indica se é um inimigo (e qual) ou o jogador
@@ -20,13 +20,12 @@ velocidade :: Velocidade                --Um vetor de velocidade normal
 type Velocidade = Double 
 data Entidade = Jogador | MacacoMalvado | Fantasma deriving (Show,Eq,Read)
 data Colecionavel = Martelo | Moeda deriving (Show,Eq,Read)
-type Mapa2 = [[Bloco]]
 
 data Jogo = Jogo 
     { mapa :: Mapa
-    --, inimigos :: [Personagem]
-    --, colecionaveis :: [(Colecionavel, Posicao)]
-    --, jogador :: Personagem
+    , inimigos :: [Personagem]
+    , colecionaveis :: [(Colecionavel, Posicao)]
+    , jogador :: Personagem
     } 
 
 

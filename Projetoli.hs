@@ -19,15 +19,13 @@ dm :: Display
 dm = InWindow "Donkey Kong" (640, 640) (0, 0)
 
 type Estado = (Float, Float)
-type EstadoGloss = (Estado, [Picture])
-type Skins = [(Personagem,Picture)]
-
+type EstadoGloss = (Estado, [Picture], Jogador, Inimigo)
 
 estadoInicial :: Estado
 estadoInicial = (0, 0)  
 
-estadoGlossInicial :: [Picture] -> EstadoGloss
-estadoGlossInicial z = (estadoInicial, z)
+estadoGlossInicial :: [Picture] -> Jogador -> Inimigo -> EstadoGloss
+estadoGlossInicial z skin inimigo = (estadoInicial, z, skin, inimigo)
 
 reageEventoGloss :: Event -> EstadoGloss -> EstadoGloss
 {-reageEventoGloss (EventKey (SpecialKey KeyUp) Down _ _) ((x, y), z) = ((x, y + mov), z)
@@ -43,7 +41,7 @@ reageEventoGloss _ s = s -- Ignora qualquer outro evento
 
 
 desenhaEstadoGloss :: EstadoGloss -> Picture
-desenhaEstadoGloss ((x, y), z) = desenhaMapa z
+desenhaEstadoGloss ((x,y), z,skin, inimigo) = desenhaMapa z skin inimigo
 
 carregaJogador :: IO[Picture]
 carregaJogador = do 
@@ -53,15 +51,19 @@ carregaJogador = do
                  return [mario]
 
 atualizaEstado :: Float -> EstadoGloss -> EstadoGloss
-atualizaEstado _ ((x, y), z) = ((x, y), z)
+atualizaEstado _ ((x, y), z,players, picm) = ((x, y), z,players, picm)
 
 main :: IO ()
 main = do
     loadMAPA <- carregaImagens
+    marioOeste <- loadBMP "/home/henrique/Code/img/Mariooeste.bmp"
+    marioLeste <- loadBMP "/home/henrique/Code/img/Marioleste.bmp"
+    macaco <- loadBMP "/home/henrique/Code/img/Mariooeste.bmp"
+    fantasma1 <- loadBMP "/home/henrique/Code/img/Marioleste.bmp"
     play dm                             -- janela onde esta a decorrer
         (black)                         -- cor do fundo da janela
         fr                              -- framerate
-        (estadoGlossInicial loadMAPA)    -- estado inicial
+        (estadoGlossInicial loadMAPA (Jogador,[marioOeste,marioLeste]) [(MacacoMalvado,macaco),(Fantasma, fantasma1)])    -- estado inicial
         desenhaEstadoGloss              -- desenha o estado do jogo
         reageEventoGloss                -- reage a um evento
         atualizaEstado                  -- reage ao passar do tempo-}

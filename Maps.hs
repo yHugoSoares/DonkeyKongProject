@@ -6,22 +6,33 @@ import Graphics.Gloss.Interface.Pure.Game
 import Graphics.Gloss.Data.Bitmap
 import Graphics.Gloss.Juicy
 import Data.Maybe
-import DataStruct (Entidade(MacacoMalvado))
 
-plataforma :: Picture
-plataforma = (Polygon [(0,0),(40,0),(40,40),(0,40)])
+type Jogador = (Entidade,[Picture])
+type Inimigo = [(Entidade,Picture)]
+type PictureM = [Picture]
 
-alcapao :: Picture
-alcapao= translate 20 20 $ color green (ThickCircle 0 20)
+desenhaJogador :: Personagem -> Jogador -> Picture
+desenhaJogador (Personagem _ _ (i,j) d _ _ _ _ _ _) skin = desenhoJogador i j d skin
 
-escada :: Picture
-escada = color red (Polygon [(0,0),(40,0),(40,40),(0,40)])
+desenhoJogador :: Float -> Float -> Direcao -> Jogador-> Picture
+desenhoJogador i j d (_,[marioO,marioL]) | d == Oeste = Translate i j  marioO
+                                         | d == Leste = Translate i j  marioL
+
+desenhaInimigo :: [Personagem] -> Inimigo -> [Picture]
+desenhaInimigo ((Personagem _ _ _ _ _ _ _ 0 _ _):t) skins        = desenhaInimigo t skins 
+desenhaInimigo ((Personagem _ tipo (i,j) _ _ _ _ _ _ _):t) skins = (desenhoInimigo i j tipo skins):desenhaInimigo t skins
+desenhaInimigo _ _                                               = []
+
+desenhoInimigo :: Float -> Float -> Entidade -> Inimigo -> Picture
+desenhoInimigo i j tipo malvados = (Translate i j) image
+        where image = (fromJust . lookup tipo) malvados
+
 
 pieceToPic :: (Bloco,[Picture]) -> Picture
-pieceToPic (Plataforma,pics) = pics !! 0
-pieceToPic (Escada,pics) = pics !! 1
-pieceToPic (Alcapao,pics) = pics !! 2
-pieceToPic (Vazio,pics) = Blank    
+pieceToPic (Plataforma,pics) = scale 2 2 $ pics !! 0
+pieceToPic (Escada,pics) = scale 2 2 $ pics !! 1
+pieceToPic (Alcapao,pics) = scale 2 2 $ pics !! 2
+pieceToPic (Vazio,pics) = scale 2 2 $ Blank    
 
 drawLine :: ([Bloco],[Picture]) -> Int -> [Picture]
 drawLine ([],_) _ = []
@@ -35,17 +46,7 @@ carregaImagens :: IO [Picture]
 carregaImagens = do plataforma <- loadBMP "/home/henrique/Code/img/Platform.bmp"
                     escada <- loadBMP "/home/henrique/Code/img/Ladder.bmp"
                     alcapao <- loadBMP "/home/henrique/Code/img/Ladder.bmp"
-                    jogador <- loadBMP "/home/henrique/Code/img/Mario.bmp"
-                    macaco <- loadBMP "/home/henrique/Code/img/Mario.bmp"
-                    fantasma <- loadBMP "/home/henrique/Code/img/Mario.bmp"
-                    return ([plataforma,escada,alcapao,jogador,macaco,fantasma])  
-
-players :: (Entidade, [Picture]) -> Picture
-players (Jogador,pics) = pics !! 3
-players (MacacoMalvado,pics) = pics !! 4
-players (Fantasma,pics) = pics !! 5
-
-
+                    return ([plataforma,escada,alcapao])  
 
 displayMode :: Display
 displayMode = InWindow "Game" (640,640) (0,0)
@@ -73,18 +74,12 @@ mapaGrande =  Mapa ((0,0),Oeste) (0,0)
                [Plataforma,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Escada,Vazio,Vazio,Vazio,Plataforma],
                [Plataforma,Plataforma,Plataforma,Plataforma,Plataforma,Plataforma,Plataforma,Plataforma,Plataforma,Plataforma,Plataforma,Plataforma,Plataforma,Plataforma,Plataforma]]
 
-desenhaMapa :: [Picture] -> Picture
-desenhaMapa pics = translate (-120) (104) $ pictures (drawMap (mapaGrande,pics) (0,0) ++ [])
-
---Mapas utilizados para teste
-
-{-mapaPequeno :: Mapa2
-mapaPequeno = [[Plataforma,Plataforma,Plataforma,Plataforma,Plataforma],
-               [Plataforma,Escada,Plataforma,Alcapao,Plataforma],
-               [Plataforma,Alcapao,Plataforma,Escada,Plataforma],
-               [Plataforma,Escada,Plataforma,Alcapao,Plataforma],
-               [Plataforma,Plataforma,Plataforma,Plataforma,Plataforma]]
+desenhaMapa :: [Picture] -> Jogador -> Inimigo -> Picture
+desenhaMapa pics skin inimigo = translate (-120) (104) $ pictures (drawMap (mapaGrande,pics) (0,0) ++ [desenhaJogador mario skin] ++ desenhaInimigo malvados inimigo )
 
 
-desenhaPequeno :: Picture 
-desenhaPequeno = translate (-100) (60) $ pictures (drawMap mapaPequeno (0,0))-}
+mario :: Personagem
+mario = Personagem 1 Jogador (20,-200) Leste (16,16) False False 1 0 (False,0)
+
+malvados :: [Personagem]
+malvados = [(Personagem 1 MacacoMalvado (100,20) Oeste (16,16) False False 1 0 (False,0)),(Personagem 1 Fantasma (100,-200) Oeste (16,16) False False 1 0 (False,0))]
