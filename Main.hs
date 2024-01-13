@@ -1,13 +1,19 @@
 module Main where
 
 import Graphics.Gloss
+    ( Picture(Text, Pictures, Color, Translate, Scale),
+      Display(InWindow),
+      black,
+      blue,
+      white,
+      play,
+      loadBMP )
 import Graphics.Gloss.Interface.Pure.Game
 import Graphics.Gloss.Data.Bitmap
 import DataStruct
 import Keyboard
 import Maps
 import Tarefa1
-
 
 fr :: Int
 fr = 50
@@ -18,7 +24,7 @@ dm = InWindow "Donkey Kong" (640, 640) (0, 0)
 type EstadoGloss = (Jogo, [Key], [Picture], Jogador, Inimigo)
 
 estadoInicial :: Jogo
-estadoInicial = Jogo (Opcoes Jogar) mapaGrande malvados [] mario
+estadoInicial = Jogo (Opcoes Jogar) mapaGrande malvados [] mario  
 
 estadoGlossInicial :: [Picture] -> Jogador -> Inimigo -> EstadoGloss
 estadoGlossInicial z skin inimigo = (estadoInicial,[], z, skin, inimigo)
@@ -29,16 +35,22 @@ reageEventoGloss evento@(EventKey k Down _ _) (jogo@(Jogo (Opcoes _) m mal b jo)
 reageEventoGloss evento (estadoInicial,keys, z,skin, inimigo) = (estadoInicial, reactKey evento keys, z,skin, inimigo)
 
 
+atualizaEstado :: Float -> EstadoGloss -> EstadoGloss
+atualizaEstado n (estadoInicial@(Jogo _ mapa _ _ mario), keys, z, skin, inimigo) = (aplicaListaKey keys estadoInicial b, keys, z, skin, inimigo)
+    where b = (colisoesChao mapa mario || colisoesParede mapa mario)
+
 -- Pega uma tecla pressionada e o estado do jogo e vai devolver o estado atualizado
 stageMenu :: Key -> Jogo -> Jogo
-stageMenu k jogo = case k of
+stageMenu k jogo = case menu jogo of 
+                    (Opcoes op) ->
+                        case k of 
                                 (SpecialKey KeyEnter) -> case op of
                                                             Jogar -> jogo {menu=ModoJogo}   --Faz com que o volte pro reageEventoGloss mas agora com a forma 'ModoJogo' entao o jogo segue normal
-                                                            Sair -> error "Fim do jogo"
-                                (SpecialKey KeyDown) -> jogo {menu = Opcoes (mudaOP op)}
-                                (SpecialKey KeyUp)   -> jogo {menu = Opcoes (mudaOP op)}
-                                _ -> jogo
-            where (Opcoes op) = menu jogo
+                                                            Sair -> error "Fim do jogo"    
+                                (SpecialKey KeyDown) -> jogo {menu = Opcoes (mudaOP op)}                           
+                                (SpecialKey KeyUp)   -> jogo {menu = Opcoes (mudaOP op)}  
+                                _ -> jogo  
+                    _ -> jogo
 
 --Vai mudar de 'Jogar' pra 'Sair'
 mudaOP :: Opcao -> Opcao
@@ -47,7 +59,7 @@ mudaOP op = case op of
                Sair -> Jogar
 
 desenhaEstadoGloss :: EstadoGloss -> Picture
-desenhaEstadoGloss (Jogo (Opcoes op) _ _ _ _,_,_,_,_)  = drawOptions op
+desenhaEstadoGloss ((Jogo (Opcoes op) _ _ _ _),_,_,_,_)  = drawOptions op
 desenhaEstadoGloss (estadoinicio@(Jogo ModoJogo _ _ _ _),keys, z,skin, inimigo) = desenhaMapa estadoinicio z skin inimigo
 
 drawOptions op =   case op of
@@ -57,11 +69,6 @@ drawOptions op =   case op of
                        Color blue $ Translate (-50) (-70) $ drawOption "Sair"]
 
 drawOption option =  Scale (0.5) (0.5) $ Text option
-
-
-atualizaEstado :: Float -> EstadoGloss -> EstadoGloss
-atualizaEstado n (estadoInicial, keys, z, skin, inimigo) = (aplicaListaKey keys estadoInicial, keys, z, skin, inimigo)
-
 
 main :: IO ()
 main = do
