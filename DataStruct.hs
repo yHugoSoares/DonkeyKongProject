@@ -3,7 +3,7 @@ module DataStruct where
 --Datas do Jogo
 data Mapa = Mapa (Posicao, Direcao) Posicao [[Bloco]]
 data Bloco = Escada | Plataforma | Alcapao | Vazio deriving (Show,Eq,Read)
-data Direcao = Norte | Sul | Leste | Oeste deriving (Show,Eq)
+data Direcao = Norte | Sul | Leste | Oeste deriving (Show,Eq,Ord)
 type Posicao = (Float,Float)            --par ordenado que define (coluna,linha)
 data Personagem = Personagem{   
 velocidade :: Velocidade                --Um vetor de velocidade normal
@@ -17,6 +17,7 @@ velocidade :: Velocidade                --Um vetor de velocidade normal
 , pontos :: Int                         --Pontuaçao acumulada
 , aplicaDano :: (Bool, Double)          --Indica se tem o martelo armado e por quanto tempo ainda. Quando ativo, cria uma hitbox à frente do jogador (com as dimensoes do jogador) e qualquer inimigo que encoste sofre dano
 }
+
 type Velocidade = Float
 data Entidade = Jogador | MacacoMalvado | Fantasma deriving (Show,Eq,Read)
 data Colecionavel = Martelo | Moeda deriving (Show,Eq,Read)
@@ -28,6 +29,9 @@ data Jogo = Jogo
     , jogador :: Personagem
     } 
 
-
+mov :: Float
+mov = 2  -- Velocidade do movimento do Mário
+jump :: Float
+jump = 2 -- Valor de salto do Mário
 
 

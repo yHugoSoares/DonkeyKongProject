@@ -31,7 +31,7 @@ jogada d (Jogo m ini colec jo) = (Jogo m ini colec (playerNovo jo))
                                                      playerNovo jo = alteraJogada jo d (Jogo m ini colec jo)
 
 alteraJogada :: Personagem -> Direcao -> Jogo -> Personagem
-alteraJogada (Personagem velo a (x,y) dire c f g h i j) d e |d == Norte = (Personagem velo a (x,y+2) dire c f g h i j)
-                                                            |d == Sul   = (Personagem velo a (x,y-2) dire c f g h i j)
+alteraJogada (Personagem velo a (x,y) dire c f g h i j) d e |d == Norte = (Personagem velo a (x,y+jump) dire c f g h i j)
+                                                            |d == Sul   = (Personagem velo a (x,y-jump) dire c f g h i j)
                                                             |d == Oeste = (Personagem velo a (x-velo,y) Oeste c f g h i j)
                                                             |d == Leste = (Personagem velo a (x+velo,y) Leste c f g h i j)

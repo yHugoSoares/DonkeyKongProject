@@ -4,7 +4,6 @@ import DataStruct
 import Graphics.Gloss
 import Graphics.Gloss.Interface.Pure.Game
 import Graphics.Gloss.Data.Bitmap
-import Graphics.Gloss.Juicy
 import Data.Maybe
 
 type Jogador = (Entidade,[Picture])
@@ -54,7 +53,7 @@ displayMode = InWindow "Game" (640,640) (0,0)
 
 
 mapaGrande :: Mapa
-mapaGrande =  Mapa ((0,0),Oeste) (0,0)
+mapaGrande =  Mapa ((20,-200),Oeste) (0,0)
               [[Plataforma,Plataforma,Plataforma,Plataforma,Plataforma,Plataforma,Plataforma,Plataforma,Plataforma,Plataforma,Plataforma,Plataforma,Plataforma,Plataforma,Plataforma],
                [Plataforma,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Plataforma],
                [Plataforma,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Plataforma],
@@ -76,7 +75,7 @@ desenhaMapa (Jogo mapa mal colec jog) pics skin inimigo = translate (-120) (104)
 
 
 mario :: Personagem
-mario = Personagem 2 Jogador (20,-200) Leste (16,16) False False 1 0 (False,0)
+mario = Personagem mov Jogador (20,-208) Oeste (16,16) False False 1 0 (False,0)
 
 malvados :: [Personagem]
 malvados = [(Personagem 1 MacacoMalvado (100,20) Oeste (16,16) False False 1 0 (False,0)),(Personagem 1 Fantasma (100,-200) Oeste (16,16) False False 1 0 (False,0))]
