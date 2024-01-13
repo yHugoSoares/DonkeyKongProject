@@ -19,7 +19,8 @@ fr :: Int
 fr = 50
 
 dm :: Display
-dm = InWindow "Donkey Kong" (640, 640) (0, 0)
+dm = FullScreen
+--dm = InWindow "Donkey Kong" (640, 640) (0, 0)
 
 type EstadoGloss = (Jogo, [Key], [Picture], Jogador, Inimigo)
 
