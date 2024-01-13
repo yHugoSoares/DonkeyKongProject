@@ -26,7 +26,7 @@ estadoGlossInicial :: [Picture] -> Jogador -> Inimigo -> EstadoGloss
 estadoGlossInicial z skin inimigo = (estadoInicial,[], z, skin, inimigo)
 
 reageEventoGloss :: Event -> EstadoGloss -> EstadoGloss
-reageEventoGloss evento@(EventKey k Down _ _) (jogo@(Jogo (Opcoes Jogar) m mal b jo) ,keys, z,skin, inimigo) = (stageMenu k jogo, reactKey evento keys, z,skin, inimigo)
+reageEventoGloss evento@(EventKey k Down _ _) (jogo@(Jogo (Opcoes j) m mal b jo) ,keys, z,skin, inimigo) = (stageMenu k jogo, reactKey evento keys, z,skin, inimigo)
                                                                                              where op = menu estadoInicial
 reageEventoGloss evento (estadoInicial,keys, z,skin, inimigo) = (estadoInicial, reactKey evento keys, z,skin, inimigo)
 
