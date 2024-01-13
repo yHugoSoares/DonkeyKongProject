@@ -1,9 +1,15 @@
-module Physics where
+module Tarefa3 where
 
+import Graphics.Gloss
+import Graphics.Gloss.Interface.Pure.Game
+import Graphics.Gloss.Data.Bitmap
 import DataStruct
+import Keyboard
+import Maps
+import Tarefa1
 
 gravidade :: Float
-gravidade = -1.0
+gravidade = -5.0
 
 atualizaPersonagem :: Float -> Personagem -> Personagem
 atualizaPersonagem dt personagem =

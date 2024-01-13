@@ -33,7 +33,7 @@ obterValor (h:t) (x,y)        |y' == 0       = obterColuna h (x,y)
         where y' = abs y
 
 obterColuna :: [Bloco] -> (Int,Int) -> Bloco
-obterColuna (h:t) (x,y) |x==0       = h
+obterColuna (h:t) (x,y) |x == 0     = h
                         |otherwise  = obterColuna t ((x-1),y)
 
 colisoesPersonagem :: Personagem -> Personagem -> Bool

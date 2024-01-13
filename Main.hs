@@ -7,14 +7,14 @@ import Graphics.Gloss
       blue,
       white,
       play,
-      loadBMP )
+      loadBMP)
 import Graphics.Gloss.Interface.Pure.Game
 import Graphics.Gloss.Data.Bitmap
 import DataStruct
 import Keyboard
 import Maps
 import Tarefa1
-import Physics
+import Tarefa3
 
 fr :: Int
 fr = 50
@@ -71,7 +71,7 @@ mudaOP op = case op of
                Sair -> Jogar
 
 desenhaEstadoGloss :: EstadoGloss -> Picture
-desenhaEstadoGloss ((Jogo (Opcoes op) _ _ _ _),_,_,_,_)  = drawOptions op
+desenhaEstadoGloss (Jogo (Opcoes op) _ _ _ _,_,_,_,_)  = drawOptions op
 desenhaEstadoGloss (estadoinicio@(Jogo ModoJogo _ _ _ _),keys, z,skin, inimigo) = desenhaMapa estadoinicio z skin inimigo
 
 drawOptions op =   case op of
@@ -80,7 +80,7 @@ drawOptions op =   case op of
     Sair ->  Pictures [Color white $ Translate (-50) 10 $ drawOption "Jogar",
                        Color blue $ Translate (-50) (-70) $ drawOption "Sair"]
 
-drawOption option =  Scale (0.5) (0.5) $ Text option
+drawOption option =  Scale 0.5 0.5 $ Text option
 
 main :: IO ()
 main = do
@@ -90,7 +90,7 @@ main = do
     macaco <- loadBMP "./img/macaco.bmp"
     fantasma <- loadBMP "./img/fantasma.bmp"
     play dm                             -- janela onde esta a decorrer
-        (black)                         -- cor do fundo da janela
+        black                           -- cor do fundo da janela
         fr                              -- framerate
         (estadoGlossInicial loadMAPA (Jogador,[marioOeste,marioLeste]) [(MacacoMalvado,macaco),(Fantasma, fantasma)])    -- estado inicial
         desenhaEstadoGloss              -- desenha o estado do jogo
