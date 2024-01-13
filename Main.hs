@@ -18,7 +18,7 @@ dm = InWindow "Donkey Kong" (640, 640) (0, 0)
 type EstadoGloss = (Jogo, [Key], [Picture], Jogador, Inimigo)
 
 estadoInicial :: Jogo
-estadoInicial = Jogo (Opcoes Jogar) mapaGrande malvados [] mario  
+estadoInicial = Jogo (Opcoes Jogar) mapaGrande malvados [] mario
 
 estadoGlossInicial :: [Picture] -> Jogador -> Inimigo -> EstadoGloss
 estadoGlossInicial z skin inimigo = (estadoInicial,[], z, skin, inimigo)
@@ -31,13 +31,13 @@ reageEventoGloss evento (estadoInicial,keys, z,skin, inimigo) = (estadoInicial, 
 
 -- Pega uma tecla pressionada e o estado do jogo e vai devolver o estado atualizado
 stageMenu :: Key -> Jogo -> Jogo
-stageMenu k jogo = case k of 
+stageMenu k jogo = case k of
                                 (SpecialKey KeyEnter) -> case op of
                                                             Jogar -> jogo {menu=ModoJogo}   --Faz com que o volte pro reageEventoGloss mas agora com a forma 'ModoJogo' entao o jogo segue normal
-                                                            Sair -> error "Fim do jogo"    
-                                (SpecialKey KeyDown) -> jogo {menu = Opcoes (mudaOP op)}                           
-                                (SpecialKey KeyUp)   -> jogo {menu = Opcoes (mudaOP op)}  
-                                _ -> jogo  
+                                                            Sair -> error "Fim do jogo"
+                                (SpecialKey KeyDown) -> jogo {menu = Opcoes (mudaOP op)}
+                                (SpecialKey KeyUp)   -> jogo {menu = Opcoes (mudaOP op)}
+                                _ -> jogo
             where (Opcoes op) = menu jogo
 
 --Vai mudar de 'Jogar' pra 'Sair'
@@ -47,7 +47,7 @@ mudaOP op = case op of
                Sair -> Jogar
 
 desenhaEstadoGloss :: EstadoGloss -> Picture
-desenhaEstadoGloss ((Jogo (Opcoes op) _ _ _ _),_,_,_,_)  = drawOptions op
+desenhaEstadoGloss (Jogo (Opcoes op) _ _ _ _,_,_,_,_)  = drawOptions op
 desenhaEstadoGloss (estadoinicio@(Jogo ModoJogo _ _ _ _),keys, z,skin, inimigo) = desenhaMapa estadoinicio z skin inimigo
 
 drawOptions op =   case op of

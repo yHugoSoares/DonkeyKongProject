@@ -33,13 +33,9 @@ obterValor (h:t) (x,y)        |y' == 0       = obterColuna h (x,y)
         where y' = abs y
 
 obterColuna :: [Bloco] -> (Int,Int) -> Bloco
-obterColuna (h:t) (x,y) |x==0       = h
-                        |otherwise  = obterColuna t ((x-1),y)
+obterColuna (h:t) (x,y) | x == 0    = h
+                        | otherwise = obterColuna t (x-1 , y)
 
 colisoesPersonagem :: Personagem -> Personagem -> Bool
 colisoesPersonagem Personagem {tamanho = (a1,b1), posicao = (x1,y1)} Personagem {tamanho = (a2,b2), posicao = (x2,y2)} = 
         not (x1 + (a1/2) < x2 - (a2/2)|| x2 + (a2/2) < x1 - (a1/2) || y1 + (b1/2) < y2 - (b2/2)|| y2 + (b2/2) < y1 - (a1/2))
-
-
-
-
