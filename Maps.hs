@@ -42,9 +42,9 @@ drawMap (Mapa _ _ [],_) _ = []
 drawMap (Mapa a b (h:t),pics) (x,y) = (Translate 0 (fromIntegral(y*(-16))) (Pictures (drawLine (h,pics) x))):(drawMap (Mapa a b t,pics) (x,y+1))
 
 carregaImagens :: IO [Picture]
-carregaImagens = do plataforma <- loadBMP "/home/henrique/Code/img/Platform.bmp"
-                    escada <- loadBMP "/home/henrique/Code/img/Ladder.bmp"
-                    alcapao <- loadBMP "/home/henrique/Code/img/Ladder.bmp"
+carregaImagens = do plataforma <- loadBMP "/home/hugo/Documents/LEI 1ano/git/img/Platform.bmp"
+                    escada <- loadBMP "/home/hugo/Documents/LEI 1ano/git/img/Ladder.bmp"
+                    alcapao <- loadBMP "/home/hugo/Documents/LEI 1ano/git/img/Ladder.bmp"
                     return ([plataforma,escada,alcapao])  
 
 displayMode :: Display
@@ -53,7 +53,7 @@ displayMode = InWindow "Game" (640,640) (0,0)
 
 
 mapaGrande :: Mapa
-mapaGrande =  Mapa ((20,-200),Oeste) (0,0)
+mapaGrande =  Mapa ((0,0),Oeste) (0,0)
               [[Plataforma,Plataforma,Plataforma,Plataforma,Plataforma,Plataforma,Plataforma,Plataforma,Plataforma,Plataforma,Plataforma,Plataforma,Plataforma,Plataforma,Plataforma],
                [Plataforma,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Plataforma],
                [Plataforma,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Plataforma],
@@ -75,7 +75,7 @@ desenhaMapa (Jogo mapa mal colec jog) pics skin inimigo = translate (-120) (104)
 
 
 mario :: Personagem
-mario = Personagem mov Jogador (20,-208) Oeste (16,16) False False 1 0 (False,0)
+mario = Personagem 2 Jogador (20,-200) Leste (16,16) False False 1 0 (False,0)
 
 malvados :: [Personagem]
 malvados = [(Personagem 1 MacacoMalvado (100,20) Oeste (16,16) False False 1 0 (False,0)),(Personagem 1 Fantasma (100,-200) Oeste (16,16) False False 1 0 (False,0))]

@@ -35,20 +35,20 @@ atualizaEstado n (estadoInicial, keys, z, skin, inimigo) = (aplicaListaKey keys 
 
 carregaJogador :: IO[Picture]
 carregaJogador = do 
-                 mario <- loadBMP "/home/henrique/Code/img/Mario.bmp"
-                 martelo <- loadBMP "/home/henrique/Code/img/Hammer.bmp"
-                 moeda <- loadBMP "/home/henrique/Code/img/Hammer.bmp"
+                 mario <- loadBMP "/img/Mario.bmp"
+                 martelo <- loadBMP "/img/Hammer.bmp"
+                 moeda <- loadBMP "/img/Hammer.bmp"
                  return [mario]
 
 main :: IO ()
 main = do
     loadMAPA <- carregaImagens
-    marioOeste <- loadBMP "/home/henrique/Code/img/Mariooeste.bmp"
-    marioLeste <- loadBMP "/home/henrique/Code/img/Marioleste.bmp"
-    macaco <- loadBMP "/home/henrique/Code/img/Mariooeste.bmp"
-    fantasma1 <- loadBMP "/home/henrique/Code/img/Marioleste.bmp"
+    marioOeste <- loadBMP "/img/Mariooeste.bmp"
+    marioLeste <- loadBMP "/img/Marioleste.bmp"
+    macaco <- loadBMP "/img/Mariooeste.bmp"
+    fantasma1 <- loadBMP "/img/Marioleste.bmp"
     play dm                             -- janela onde esta a decorrer
-        (black)                         -- cor do fundo da janela
+        black                           -- cor do fundo da janela
         fr                              -- framerate
         (estadoGlossInicial loadMAPA (Jogador,[marioOeste,marioLeste]) [(MacacoMalvado,macaco),(Fantasma, fantasma1)])    -- estado inicial
         desenhaEstadoGloss              -- desenha o estado do jogo
