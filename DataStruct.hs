@@ -36,5 +36,3 @@ mov :: Float
 mov = 2  -- Velocidade do movimento do Mário
 jump :: Float
 jump = 2 -- Valor de salto do Mário
-
-

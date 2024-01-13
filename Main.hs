@@ -14,6 +14,7 @@ import DataStruct
 import Keyboard
 import Maps
 import Tarefa1
+import Physics
 
 fr :: Int
 fr = 50
@@ -25,7 +26,7 @@ dm = FullScreen
 type EstadoGloss = (Jogo, [Key], [Picture], Jogador, Inimigo)
 
 estadoInicial :: Jogo
-estadoInicial = Jogo (Opcoes Jogar) mapaGrande malvados [] mario  
+estadoInicial = Jogo (Opcoes Jogar) mapaGrande malvados [] mario
 
 estadoGlossInicial :: [Picture] -> Jogador -> Inimigo -> EstadoGloss
 estadoGlossInicial z skin inimigo = (estadoInicial,[], z, skin, inimigo)
@@ -36,21 +37,31 @@ reageEventoGloss evento@(EventKey k Down _ _) (jogo@(Jogo (Opcoes _) m mal b jo)
 reageEventoGloss evento (estadoInicial,keys, z,skin, inimigo) = (estadoInicial, reactKey evento keys, z,skin, inimigo)
 
 
+-- atualizaEstado :: Float -> EstadoGloss -> EstadoGloss
+-- atualizaEstado n (estadoInicial@(Jogo _ mapa _ _ mario), keys, z, skin, inimigo) = (aplicaListaKey keys estadoInicial b, keys, z, skin, inimigo)
+--     where b = (colisoesChao mapa mario || colisoesParede mapa mario)
+
 atualizaEstado :: Float -> EstadoGloss -> EstadoGloss
-atualizaEstado n (estadoInicial@(Jogo _ mapa _ _ mario), keys, z, skin, inimigo) = (aplicaListaKey keys estadoInicial b, keys, z, skin, inimigo)
-    where b = (colisoesChao mapa mario || colisoesParede mapa mario)
+atualizaEstado n (estadoInicial@(Jogo _ mapa malvados _ mario), keys, z, skin, inimigo) =
+  (aplicaListaKey keys estadoAtualizado colisao, keys, z, skin, inimigo)
+    where
+      estadoAtualizado = Jogo ModoJogo mapa malvados novoB marioAtualizado
+      novoB = atualizaCollectibles n b  -- Assuming `atualizaCollectibles` updates the collectibles based on time
+      colisao = colisoesChao mapa marioAtualizado || colisoesParede mapa marioAtualizado
+      marioAtualizado = atualizaPersonagem n mario
+      b = colecionaveis estadoInicial  -- Assuming `coletaveis` is a function that gets the current list of collectibles
 
 -- Pega uma tecla pressionada e o estado do jogo e vai devolver o estado atualizado
 stageMenu :: Key -> Jogo -> Jogo
-stageMenu k jogo = case menu jogo of 
+stageMenu k jogo = case menu jogo of
                     (Opcoes op) ->
-                        case k of 
+                        case k of
                                 (SpecialKey KeyEnter) -> case op of
                                                             Jogar -> jogo {menu=ModoJogo}   --Faz com que o volte pro reageEventoGloss mas agora com a forma 'ModoJogo' entao o jogo segue normal
-                                                            Sair -> error "Fim do jogo"    
-                                (SpecialKey KeyDown) -> jogo {menu = Opcoes (mudaOP op)}                           
-                                (SpecialKey KeyUp)   -> jogo {menu = Opcoes (mudaOP op)}  
-                                _ -> jogo  
+                                                            Sair -> error "Fim do jogo"
+                                (SpecialKey KeyDown) -> jogo {menu = Opcoes (mudaOP op)}
+                                (SpecialKey KeyUp)   -> jogo {menu = Opcoes (mudaOP op)}
+                                _ -> jogo
                     _ -> jogo
 
 --Vai mudar de 'Jogar' pra 'Sair'
