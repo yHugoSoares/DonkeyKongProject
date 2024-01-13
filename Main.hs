@@ -50,7 +50,7 @@ stageMenu k w = case menu w of
                                  Jogar -> w {menu = ModoJogo}
                                  Sair -> error "Fim de Jogo"
        (SpecialKey KeyDown) -> trace "Pressed Down" $ w {menu = Opcoes (mudaOP op)}                          
-       (SpecialKey KeyUp)   -> trace "Pressed Down" $ w {menu = Opcoes (mudaOP op)}   
+       (SpecialKey KeyUp)   -> trace "Pressed Up" $ w {menu = Opcoes (mudaOP op)}   
        _                    -> w
 
 --Vai mudar de 'Jogar' pra 'Sair', mas nao ta a funcionar nao sei pq, o jogo nao deixa vc voltar pra 'Jogar' quando fica em 'Sair'
