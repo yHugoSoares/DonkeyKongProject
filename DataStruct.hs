@@ -4,8 +4,8 @@ module DataStruct where
 data Mapa = Mapa (Posicao, Direcao) Posicao [[Bloco]]
 data Bloco = Escada | Plataforma | Alcapao | Vazio deriving (Show,Eq,Read)
 data Direcao = Norte | Sul | Leste | Oeste deriving (Show,Eq,Ord)
-data Opcao = Jogar | Sair
-data Menu = Opcoes Opcao | ModoJogo | VenceuJogo
+data Opcao = Jogar | Sair deriving (Show,Eq,Ord)
+data Menu = Opcoes Opcao | ModoJogo | VenceuJogo deriving (Show,Eq,Ord)
 type Posicao = (Float,Float)            --par ordenado que define (coluna,linha)
 data Personagem = Personagem{   
 velocidade :: Velocidade                --Um vetor de velocidade normal

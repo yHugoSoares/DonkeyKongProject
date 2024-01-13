@@ -20,7 +20,7 @@ aplicaKey (SpecialKey KeyUp) j        = jogada Norte j
 aplicaKey (SpecialKey KeyDown) j      = jogada Sul j
 aplicaKey (SpecialKey KeyLeft) j      = jogada Oeste j
 aplicaKey (SpecialKey KeyRight) j     = jogada Leste j
-aplicaKey _ j = j
+aplicaKey _ j                         = j
 
 
 jogada ::Direcao -- A 'Jogada' a efetuar.

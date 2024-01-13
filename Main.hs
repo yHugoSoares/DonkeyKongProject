@@ -24,12 +24,32 @@ estadoGlossInicial :: [Picture] -> Jogador -> Inimigo -> EstadoGloss
 estadoGlossInicial z skin inimigo = (estadoInicial,[], z, skin, inimigo)
 
 reageEventoGloss :: Event -> EstadoGloss -> EstadoGloss
+reageEventoGloss evento@(EventKey k Down _ _) (jogo@(Jogo (Opcoes Jogar) m mal b jo) ,keys, z,skin, inimigo) = (stageMenu k jogo, reactKey evento keys, z,skin, inimigo)
+                                                                                             where op = menu estadoInicial
 reageEventoGloss evento (estadoInicial,keys, z,skin, inimigo) = (estadoInicial, reactKey evento keys, z,skin, inimigo)
+
+
+-- Pega uma tecla pressionada e o estado do jogo e vai devolver o estado atualizado
+stageMenu :: Key -> Jogo -> Jogo
+stageMenu k jogo = case k of 
+                                (SpecialKey KeyEnter) -> case op of
+                                                            Jogar -> jogo {menu=ModoJogo}   --Faz com que o volte pro reageEventoGloss mas agora com a forma 'ModoJogo' entao o jogo segue normal
+                                                            Sair -> jogo {menu=ModoJogo}    --Isso aqui tá errado, era pra ser algum erro pra fechar o jogo
+                                (SpecialKey KeyDown) -> jogo {menu = Opcoes (mudaOP op)}                           
+                                (SpecialKey KeyUp)   -> jogo {menu = Opcoes (mudaOP op)}  
+                                _ -> jogo  
+            where (Opcoes op) = menu jogo
+
+--Vai mudar de 'Jogar' pra 'Sair', mas nao ta a funcionar nao sei pq, o jogo nao deixa vc voltar pra 'Jogar' quando fica em 'Sair'
+mudaOP :: Opcao -> Opcao
+mudaOP op = case op of
+               Jogar -> Sair
+               Sair -> Jogar
 
 
 desenhaEstadoGloss :: EstadoGloss -> Picture
 desenhaEstadoGloss ((Jogo (Opcoes op) _ _ _ _),_,_,_,_)  = drawOptions op
-desenhaEstadoGloss (estadoInicial,keys, z,skin, inimigo) = desenhaMapa estadoInicial z skin inimigo
+desenhaEstadoGloss (estadoinicio@(Jogo ModoJogo _ _ _ _),keys, z,skin, inimigo) = desenhaMapa estadoinicio z skin inimigo
 
 drawOptions op =   case op of
     Jogar -> Pictures [Translate (-50) 10 $ Color blue $ drawOption "Jogar",
