@@ -30,15 +30,26 @@ reageEventoGloss evento (estadoInicial,keys, z,skin, inimigo) = (estadoInicial, 
 
 
 -- Pega uma tecla pressionada e o estado do jogo e vai devolver o estado atualizado
+-- stageMenu :: Key -> Jogo -> Jogo
+-- stageMenu k jogo = case k of 
+--                                 (SpecialKey KeyEnter) -> case op of
+--                                                             Jogar -> jogo {menu=ModoJogo}   --Faz com que o volte pro reageEventoGloss mas agora com a forma 'ModoJogo' entao o jogo segue normal
+--                                                             Sair -> jogo {menu=ModoJogo}    --Isso aqui tá errado, era pra ser algum erro pra fechar o jogo
+--                                 (SpecialKey KeyDown) -> jogo {menu = Opcoes (mudaOP op)}                           
+--                                 (SpecialKey KeyUp)   -> jogo {menu = Opcoes (mudaOP op)}  
+--                                 _ -> jogo  
+--             where (Opcoes op) = menu jogo
+
 stageMenu :: Key -> Jogo -> Jogo
-stageMenu k jogo = case k of 
-                                (SpecialKey KeyEnter) -> case op of
-                                                            Jogar -> jogo {menu=ModoJogo}   --Faz com que o volte pro reageEventoGloss mas agora com a forma 'ModoJogo' entao o jogo segue normal
-                                                            Sair -> jogo {menu=ModoJogo}    --Isso aqui tá errado, era pra ser algum erro pra fechar o jogo
-                                (SpecialKey KeyDown) -> jogo {menu = Opcoes (mudaOP op)}                           
-                                (SpecialKey KeyUp)   -> jogo {menu = Opcoes (mudaOP op)}  
-                                _ -> jogo  
-            where (Opcoes op) = menu jogo
+stageMenu k w = case menu w of
+  (Opcoes op) ->
+    case k of
+       (SpecialKey KeyEnter) -> case op of
+                                 Jogar -> w {menu=ModoJogo}
+                                 Sair -> error "Fim de Jogo"
+       (SpecialKey KeyDown) -> w {menu = Opcoes (mudaOP op)}                          
+       (SpecialKey KeyUp)   -> w {menu = Opcoes (mudaOP op)}   
+       _ -> w
 
 --Vai mudar de 'Jogar' pra 'Sair', mas nao ta a funcionar nao sei pq, o jogo nao deixa vc voltar pra 'Jogar' quando fica em 'Sair'
 mudaOP :: Opcao -> Opcao
@@ -67,10 +78,10 @@ atualizaEstado n (estadoInicial, keys, z, skin, inimigo) = (aplicaListaKey keys 
 main :: IO ()
 main = do
     loadMAPA <- carregaImagens
-    marioOeste <- loadBMP "/home/henrique/Code/img/Mariooeste.bmp"
-    marioLeste <- loadBMP "/home/henrique/Code/img/Marioleste.bmp"
-    macaco <- loadBMP "/home/henrique/Code/img/macaco.bmp"
-    fantasma <- loadBMP "/home/henrique/Code/img/fantasma.bmp"
+    marioOeste <- loadBMP "/home/hugo/Documents/LEI 1ano/git/img/Mariooeste.bmp"
+    marioLeste <- loadBMP "/home/hugo/Documents/LEI 1ano/git/img/Marioleste.bmp"
+    macaco <- loadBMP "/home/hugo/Documents/LEI 1ano/git/img/macaco.bmp"
+    fantasma <- loadBMP "/home/hugo/Documents/LEI 1ano/git/img/fantasma.bmp"
     play dm                             -- janela onde esta a decorrer
         (black)                         -- cor do fundo da janela
         fr                              -- framerate
