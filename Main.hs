@@ -28,17 +28,21 @@ reageEventoGloss evento (estadoInicial,keys, z,skin, inimigo) = (estadoInicial, 
 
 
 desenhaEstadoGloss :: EstadoGloss -> Picture
+desenhaEstadoGloss ((Jogo (Opcoes op) _ _ _ _),_,_,_,_)  = drawOptions op
 desenhaEstadoGloss (estadoInicial,keys, z,skin, inimigo) = desenhaMapa estadoInicial z skin inimigo
+
+drawOptions op =   case op of
+    Jogar -> Pictures [Translate (-50) 10 $ Color blue $ drawOption "Jogar",
+                       Translate (-50) (-70) $ Color white $ drawOption "Sair"]
+    Sair ->  Pictures [Color white $ Translate (-50) 10 $ drawOption "Jogar",
+                       Color blue $ Translate (-50) (-70) $ drawOption "Sair"]
+
+drawOption option =  Scale (0.5) (0.5) $ Text option
+
 
 atualizaEstado :: Float -> EstadoGloss -> EstadoGloss
 atualizaEstado n (estadoInicial, keys, z, skin, inimigo) = (aplicaListaKey keys estadoInicial, keys, z, skin, inimigo)
 
-carregaJogador :: IO[Picture]
-carregaJogador = do 
-                 mario <- loadBMP "/home/henrique/Code/img/Mario.bmp"
-                 martelo <- loadBMP "/home/henrique/Code/img/Hammer.bmp"
-                 moeda <- loadBMP "/home/henrique/Code/img/Hammer.bmp"
-                 return [mario]
 
 main :: IO ()
 main = do
