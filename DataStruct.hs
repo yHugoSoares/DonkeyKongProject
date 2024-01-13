@@ -12,7 +12,7 @@ velocidade :: Velocidade                --Um vetor de velocidade normal
 , tipo :: Entidade                      --Indica se é um inimigo (e qual) ou o jogador
 , posicao :: Posicao                    --Coordenadas atuais
 , direcao :: Direcao                    --Para qual posiçao (N,S,L,O) está virado
-, tamanho :: (Double, Double)           --Tamanho do personagem descrito por um rectângulo largura X altura
+, tamanho :: (Float, Float)           --Tamanho do personagem descrito por um rectângulo largura X altura
 , emEscada :: Bool                      --Indica se o personagem se encontra a subir/descer uma escada
 , ressalta :: Bool                      --Indica se o personagem deve trocar de direçao ao colidir com uma parede ou ao chegar no final de uma plataforma
 , vida :: Int                           --Quantas vidas faltam
@@ -36,3 +36,5 @@ mov :: Float
 mov = 2  -- Velocidade do movimento do Mário
 jump :: Float
 jump = 2 -- Valor de salto do Mário
+
+

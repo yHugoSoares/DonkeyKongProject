@@ -18,7 +18,7 @@ dm = InWindow "Donkey Kong" (640, 640) (0, 0)
 type EstadoGloss = (Jogo, [Key], [Picture], Jogador, Inimigo)
 
 estadoInicial :: Jogo
-estadoInicial = Jogo mapaGrande malvados [] mario  
+estadoInicial = Jogo (Opcoes Jogar) mapaGrande malvados [] mario  
 
 estadoGlossInicial :: [Picture] -> Jogador -> Inimigo -> EstadoGloss
 estadoGlossInicial z skin inimigo = (estadoInicial,[], z, skin, inimigo)
@@ -35,22 +35,22 @@ atualizaEstado n (estadoInicial, keys, z, skin, inimigo) = (aplicaListaKey keys 
 
 carregaJogador :: IO[Picture]
 carregaJogador = do 
-                 mario <- loadBMP "/img/Mario.bmp"
-                 martelo <- loadBMP "/img/Hammer.bmp"
-                 moeda <- loadBMP "/img/Hammer.bmp"
+                 mario <- loadBMP "/home/henrique/Code/img/Mario.bmp"
+                 martelo <- loadBMP "/home/henrique/Code/img/Hammer.bmp"
+                 moeda <- loadBMP "/home/henrique/Code/img/Hammer.bmp"
                  return [mario]
 
 main :: IO ()
 main = do
     loadMAPA <- carregaImagens
-    marioOeste <- loadBMP "/img/Mariooeste.bmp"
-    marioLeste <- loadBMP "/img/Marioleste.bmp"
-    macaco <- loadBMP "/img/Mariooeste.bmp"
-    fantasma1 <- loadBMP "/img/Marioleste.bmp"
+    marioOeste <- loadBMP "/home/henrique/Code/img/Mariooeste.bmp"
+    marioLeste <- loadBMP "/home/henrique/Code/img/Marioleste.bmp"
+    macaco <- loadBMP "/home/henrique/Code/img/macaco.bmp"
+    fantasma <- loadBMP "/home/henrique/Code/img/fantasma.bmp"
     play dm                             -- janela onde esta a decorrer
-        black                           -- cor do fundo da janela
+        (black)                         -- cor do fundo da janela
         fr                              -- framerate
-        (estadoGlossInicial loadMAPA (Jogador,[marioOeste,marioLeste]) [(MacacoMalvado,macaco),(Fantasma, fantasma1)])    -- estado inicial
+        (estadoGlossInicial loadMAPA (Jogador,[marioOeste,marioLeste]) [(MacacoMalvado,macaco),(Fantasma, fantasma)])    -- estado inicial
         desenhaEstadoGloss              -- desenha o estado do jogo
         reageEventoGloss                -- reage a um evento
         atualizaEstado                  -- reage ao passar do tempo-}

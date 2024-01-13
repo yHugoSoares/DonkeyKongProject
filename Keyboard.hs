@@ -26,9 +26,9 @@ aplicaKey _ j = j
 jogada ::Direcao -- A 'Jogada' a efetuar.
         -> Jogo -- O 'Estado' anterior.
         -> Jogo -- O 'Estado' resultante após o jogador efetuar a jogada.      
-jogada d (Jogo m ini colec jo) = (Jogo m ini colec (playerNovo jo)) 
+jogada d (Jogo menu m ini colec jo) = (Jogo menu m ini colec (playerNovo jo)) 
                                                where 
-                                                     playerNovo jo = alteraJogada jo d (Jogo m ini colec jo)
+                                                     playerNovo jo = alteraJogada jo d (Jogo menu m ini colec jo)
 
 alteraJogada :: Personagem -> Direcao -> Jogo -> Personagem
 alteraJogada (Personagem velo a (x,y) dire c f g h i j) d e |d == Norte = (Personagem velo a (x,y+jump) dire c f g h i j)
