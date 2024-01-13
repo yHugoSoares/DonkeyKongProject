@@ -8,8 +8,6 @@ import Keyboard
 import Maps
 import Tarefa1
 
-import Debug.Trace
-
 
 fr :: Int
 fr = 50
