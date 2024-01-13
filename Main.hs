@@ -32,31 +32,21 @@ reageEventoGloss evento (estadoInicial,keys, z,skin, inimigo) = (estadoInicial, 
 
 
 -- Pega uma tecla pressionada e o estado do jogo e vai devolver o estado atualizado
--- stageMenu :: Key -> Jogo -> Jogo
--- stageMenu k jogo = case k of 
---                                 (SpecialKey KeyEnter) -> case op of
---                                                             Jogar -> jogo {menu=ModoJogo}   --Faz com que o volte pro reageEventoGloss mas agora com a forma 'ModoJogo' entao o jogo segue normal
---                                                             Sair -> jogo {menu=ModoJogo}    --Isso aqui tá errado, era pra ser algum erro pra fechar o jogo
---                                 (SpecialKey KeyDown) -> jogo {menu = Opcoes (mudaOP op)}                           
---                                 (SpecialKey KeyUp)   -> jogo {menu = Opcoes (mudaOP op)}  
---                                 _ -> jogo  
---             where (Opcoes op) = menu jogo
-
 stageMenu :: Key -> Jogo -> Jogo
-stageMenu k w = case menu w of
-  (Opcoes op) ->
-    case k of
-       (SpecialKey KeyEnter) -> case op of
-                                 Jogar -> w {menu = ModoJogo}
-                                 Sair -> error "Fim de Jogo"
-       (SpecialKey KeyDown) -> trace "Pressed Down" $ w {menu = Opcoes (mudaOP op)}                          
-       (SpecialKey KeyUp)   -> trace "Pressed Up" $ w {menu = Opcoes (mudaOP op)}   
-       _                    -> w
+stageMenu k jogo = case k of 
+                                (SpecialKey KeyEnter) -> case op of
+                                                            Jogar -> jogo {menu=ModoJogo}   --Faz com que o volte pro reageEventoGloss mas agora com a forma 'ModoJogo' entao o jogo segue normal
+                                                            Sair -> error "Fim do jogo"    
+                                (SpecialKey KeyDown) -> jogo {menu = Opcoes (mudaOP op)}                           
+                                (SpecialKey KeyUp)   -> jogo {menu = Opcoes (mudaOP op)}  
+                                _ -> jogo  
+            where (Opcoes op) = menu jogo
 
---Vai mudar de 'Jogar' pra 'Sair', mas nao ta a funcionar nao sei pq, o jogo nao deixa vc voltar pra 'Jogar' quando fica em 'Sair'
+--Vai mudar de 'Jogar' pra 'Sair'
 mudaOP :: Opcao -> Opcao
-mudaOP Jogar = Sair
-mudaOP Sair = Jogar
+mudaOP op = case op of
+               Jogar -> Sair
+               Sair -> Jogar
 
 desenhaEstadoGloss :: EstadoGloss -> Picture
 desenhaEstadoGloss ((Jogo (Opcoes op) _ _ _ _),_,_,_,_)  = drawOptions op
