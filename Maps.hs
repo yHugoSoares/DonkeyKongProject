@@ -42,9 +42,9 @@ drawMap (Mapa _ _ [],_) _ = []
 drawMap (Mapa a b (h:t),pics) (x,y) = (Translate 0 (fromIntegral(y*(-16))) (Pictures (drawLine (h,pics) x))):(drawMap (Mapa a b t,pics) (x,y+1))
 
 carregaImagens :: IO [Picture]
-carregaImagens = do plataforma <- loadBMP "/home/hugo/Documents/LEI 1ano/git/img/Platform.bmp"
-                    escada <- loadBMP "/home/hugo/Documents/LEI 1ano/git/img/Ladder.bmp"
-                    alcapao <- loadBMP "/home/hugo/Documents/LEI 1ano/git/img/Ladder.bmp"
+carregaImagens = do plataforma <- loadBMP "./img/Platform.bmp"
+                    escada <- loadBMP "./img/Ladder.bmp"
+                    alcapao <- loadBMP "./img/Ladder.bmp"
                     return ([plataforma,escada,alcapao])  
 
 displayMode :: Display

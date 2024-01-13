@@ -66,10 +66,10 @@ atualizaEstado n (estadoInicial, keys, z, skin, inimigo) = (aplicaListaKey keys 
 main :: IO ()
 main = do
     loadMAPA <- carregaImagens
-    marioOeste <- loadBMP "/home/hugo/Documents/LEI 1ano/git/img/Mariooeste.bmp"
-    marioLeste <- loadBMP "/home/hugo/Documents/LEI 1ano/git/img/Marioleste.bmp"
-    macaco <- loadBMP "/home/hugo/Documents/LEI 1ano/git/img/macaco.bmp"
-    fantasma <- loadBMP "/home/hugo/Documents/LEI 1ano/git/img/fantasma.bmp"
+    marioOeste <- loadBMP "./img/Mariooeste.bmp"
+    marioLeste <- loadBMP "./img/Marioleste.bmp"
+    macaco <- loadBMP "./img/macaco.bmp"
+    fantasma <- loadBMP "./img/fantasma.bmp"
     play dm                             -- janela onde esta a decorrer
         (black)                         -- cor do fundo da janela
         fr                              -- framerate
