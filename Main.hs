@@ -8,6 +8,8 @@ import Keyboard
 import Maps
 import Tarefa1
 
+import Debug.Trace
+
 
 fr :: Int
 fr = 50
@@ -45,18 +47,16 @@ stageMenu k w = case menu w of
   (Opcoes op) ->
     case k of
        (SpecialKey KeyEnter) -> case op of
-                                 Jogar -> w {menu=ModoJogo}
+                                 Jogar -> w {menu = ModoJogo}
                                  Sair -> error "Fim de Jogo"
-       (SpecialKey KeyDown) -> w {menu = Opcoes (mudaOP op)}                          
-       (SpecialKey KeyUp)   -> w {menu = Opcoes (mudaOP op)}   
-       _ -> w
+       (SpecialKey KeyDown) -> trace "Pressed Down" $ w {menu = Opcoes (mudaOP op)}                          
+       (SpecialKey KeyUp)   -> trace "Pressed Down" $ w {menu = Opcoes (mudaOP op)}   
+       _                    -> w
 
 --Vai mudar de 'Jogar' pra 'Sair', mas nao ta a funcionar nao sei pq, o jogo nao deixa vc voltar pra 'Jogar' quando fica em 'Sair'
 mudaOP :: Opcao -> Opcao
-mudaOP op = case op of
-               Jogar -> Sair
-               Sair -> Jogar
-
+mudaOP Jogar = Sair
+mudaOP Sair = Jogar
 
 desenhaEstadoGloss :: EstadoGloss -> Picture
 desenhaEstadoGloss ((Jogo (Opcoes op) _ _ _ _),_,_,_,_)  = drawOptions op
