@@ -12,9 +12,6 @@ movimenta semente tempo jogo =
             pegarColec = pegarcolecionaveis jogoGravidade
             jogoColide = bater pegarColec
 
-
-
-
 bater :: Jogo -> Jogo
 bater jogo@Jogo {jogador = mario@Personagem {aplicaDano = (danoX, _), vida = v}, inimigos = (ini:resto)} = 
           case (colisaohitbox mario ini,colisoesPersonagem mario ini ) of
