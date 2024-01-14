@@ -98,7 +98,7 @@ main = do
     macaco <- loadBMP "./img/macaco.bmp"
     fantasma <- loadBMP "./img/fantasma.bmp"
     martelo <- loadBMP "./img/Hammer.bmp"
-    moeda <- loadBMP "./img/Hammer.bmp"
+    moeda <- loadBMP "./img/coin.bmp"
     play dm                             -- janela onde esta a decorrer
         (black)                         -- cor do fundo da janela
         fr                              -- framerate

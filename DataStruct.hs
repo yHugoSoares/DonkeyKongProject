@@ -71,10 +71,8 @@ data Jogo = Jogo
 
 -- | Constante representando a velocidade de movimento dos personagens.
 mov :: Float
-mov = 4 
+mov = 3
 
 -- | Constante representando a altura do salto para os personagens.
 jump :: Float
-jump = 35
-
-
+jump = 5
