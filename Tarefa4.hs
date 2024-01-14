@@ -1,3 +1,15 @@
+{-|
+Module : Tarefa 4
+Description : Modulo Haskell Gloss Tarefa4
+Copyright : Hugo Soares (a107293)
+            Henrique Brito (a107378)
+Actualização das velocidades e direcções dos
+personagens
+O objectivo desta tarefa é implementar a função
+atualiza :: [Maybe Acao] -> Maybe Acao -> Jogo -> Jogo
+A função atualiza deve validar e calcular as novas direções e velocidades
+dos personagens (inimigos e jogador) de acordo com as ações dadas.
+-}
 module Tarefa4 where
 
 import Graphics.Gloss
