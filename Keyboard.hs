@@ -25,12 +25,20 @@ aplicaKey (SpecialKey KeyRight) j _    = jogada Leste j
 aplicaKey _ j _                        = j
 
 colisao :: Key -> Jogo -> Jogo
-colisao k (Jogo menu mapa ini colec jog) = Jogo menu mapa ini colec (alteraColisao k jog parede chao)
+colisao k (Jogo menu mapa ini colec jog) = Jogo menu mapa ini colec (alteraColisao k jog parede chao personagem)
                 where parede = colisoesParede mapa jog 
                       chao = colisoesChao mapa jog 
-        
-alteraColisao :: Key -> Personagem -> Bool -> Bool -> Personagem
-alteraColisao k (Personagem velo a (x,y) dire c f d h i j g) parede chao |parede && chao && (dire == Leste || dire == Sul) = Personagem velo a (x-velo,y+velo) dire c f d h i j g
+                      personagem = colisoesPersonagem ini jog
+
+alteraColisao :: Key -> Personagem -> Bool -> Bool -> Bool -> Personagem
+alteraColisao k (Personagem velo a (x,y) dire c f d h i j g) parede chao pe 
+
+
+
+
+
+
+                                                                         |parede && chao && (dire == Leste || dire == Sul) = Personagem velo a (x-velo,y+velo) dire c f d h i j g
                                                                          |parede && chao && (dire == Oeste || dire == Sul) = Personagem velo a (x+velo,y+velo) dire c f d h i j g
                                                                          |parede && (dire == Oeste) = Personagem velo a (x+velo,y) dire c f d h i j g
                                                                          |parede && (dire == Leste) = Personagem velo a (x-velo,y) dire c f d h i j g

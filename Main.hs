@@ -1,3 +1,11 @@
+{-|
+Module : Main
+Description : Modulo Haskell Gloss Main
+Copyright : Hugo Soares (a107293)
+            Henrique Brito (a107378)
+Este modulo usa a biblioteca Gloss de
+maneira a fazer um jogo do Donkey Kong.
+-}
 module Main where
 
 import Graphics.Gloss
@@ -18,7 +26,7 @@ import Tarefa3
 
 -- | Taxa de quadros por segundo do jogo.
 fr :: Int
-fr = 50
+fr = 25
 
 -- | Configurações de exibição para a janela do jogo.
 dm :: Display
@@ -45,8 +53,8 @@ reageEventoGloss evento (estadoInicial,keys, z,skin, inimigo) = (estadoInicial, 
 
 -- | Função para atualizar o estado do jogo.
 atualizaEstado :: Float -> EstadoGloss -> EstadoGloss
-atualizaEstado n (estadoInicial@(Jogo _ mapa _ _ mario), keys, z, skin, inimigo) = (aplicaListaKey keys estadoInicial colisoesChaoOuParede, keys, z, skin, inimigo)
-    where colisoesChaoOuParede = colisoesChao mapa mario || colisoesParede mapa mario
+atualizaEstado n (estadoInicial@(Jogo _ mapa ini _ mario), keys, z, skin, inimigo) = (aplicaListaKey keys (aplicaGravidade estadoInicial) colisoes, keys, z, skin, inimigo)
+    where colisoes= colisoesChao mapa mario || colisoesParede mapa mario || colisoesPersonagem ini mario
 
 
 -- | Função que atualiza o estado do jogo com base na tecla pressionada e no estado atual do jogo.

@@ -8,28 +8,32 @@ import Keyboard
 
 
 valida :: Jogo -> Bool
-valida (Jogo _ mapa inimigos _ jog) = verificaChao mapa && verificaRessalta inimigos jog && verificaPosicao inimigos jog && numeroInimigos inimigos && vidaFantasma inimigos && verificaMapa mapa && verificaLargura jog l
+valida (Jogo _ mapa inimigos col jog) = verificaChao mapa && verificaRessalta inimigos jog && verificaPosicao inimigos jog 
+                                      && numeroInimigos inimigos && vidaFantasma inimigos && verificaMapa mapa && verificaLargura jog l
+                                      && verificaDentro (jog:inimigos) mapa && verificaCol col mapa
 
 
 verificaChao :: Mapa -> Bool
 verificaChao (Mapa _ _ mapa) = all (==Plataforma) (last mapa)
 
 verificaRessalta :: [Personagem] -> Personagem ->  Bool
-verificaRessalta ((Personagem _ _ _ _ _ _ ressini _ _ _ _):t) p@(Personagem _ _ _ _ _ _ ressjog _ _ _ _)= ressini && ressjog && verificaRessalta t p
 verificaRessalta [] _ = True
+verificaRessalta ((Personagem _ _ _ _ _ _ ressini _ _ _ _):t) p@(Personagem _ _ _ _ _ _ ressjog _ _ _ _)= ressini && not ressjog && verificaRessalta t p
+
 
 verificaPosicao :: [Personagem] -> Personagem -> Bool
 verificaPosicao ((Personagem _ _ (x1,y1) _ (a1,b1) _ _ _ _ _ _):t) p@(Personagem _ _ (x2,y2) _ (a2,b2) _ _ _ _ _ _) = 
-        not (x1 + (a1/2) < x2 - (a2/2)|| x2 + (a2/2) < x1 - (a1/2) || y1 + (b1/2) < y2 - (b2/2)|| y2 + (b2/2) < y1 - (a1/2)) && verificaPosicao t p
-verficaPosicao [] _ = True
+         (x1 + (a1/2) < x2 - (a2/2)|| x2 + (a2/2) < x1 - (a1/2) || y1 + (b1/2) < y2 - (b2/2)|| y2 + (b2/2) < y1 - (a1/2)) && verificaPosicao t p
+verificaPosicao _ _ = True
 
 numeroInimigos :: [Personagem] -> Bool
 numeroInimigos ini = length ini == 3
 
 vidaFantasma :: [Personagem] -> Bool
+vidaFantasma [] = True
 vidaFantasma ((Personagem _ enti _ _ _ _ _ v _ _ _):t) |enti == Fantasma = v == 1 && vidaFantasma t
                                                      |otherwise = vidaFantasma t
-vidaFantasma [] = True
+
 
 blocoabaixo :: [[Bloco]] -> (Int,Int) -> Bloco
 blocoabaixo mapa (x,y) = obterValor mapa (x,y+1)
@@ -61,7 +65,20 @@ verificaMapa map@(Mapa _ _ mapa) = all (\coord -> verificaEscada map coord) coor
         where
             coordenadas = [(x,y) | x <- [0 .. length mapa -1], y <- [0 .. length (head mapa) - 1]]
 
-verificaLargura :: Personagem -> (Float,Float) -> Bool
-verificaLargura (Personagem _ _ _ _ (a,l) _ _ _ _ _ _) (a2,l2) = l < l2
+verificaLargura :: Personagem -> Float -> Bool
+verificaLargura (Personagem _ _ _ _ (a,l) _ _ _ _ _ _) l2 = l < l2
 
---verificaDentro :: 
+verificaDentro :: [Personagem] -> Mapa -> Bool
+verificaDentro [] _ = True 
+verificaDentro (Personagem {posicao = (x,y)}:t) map@(Mapa _ _ mapa) = 
+        case obterValor mapa (round (x/16),round (y/16)) of
+             Vazio -> verificaDentro t map
+             Escada -> verificaDentro t map
+             _ -> False
+
+verificaCol :: [(Colecionavel, Posicao)] -> Mapa -> Bool
+verificaCol ((col,(x,y)):t) map@(Mapa _ _ mapa) = 
+        case obterValor mapa (round (x/16),round (y/16)) of
+             Vazio -> verificaCol t map
+             Escada -> verificaCol t map
+             _ -> False

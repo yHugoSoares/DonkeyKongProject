@@ -6,7 +6,6 @@ import Graphics.Gloss
 import Graphics.Gloss.Interface.Pure.Game
 import Graphics.Gloss.Data.Bitmap
 import Data.Maybe
-import Tarefa3
 
 -- | Tipo representando um jogador com sua aparência.
 type Jogador = (Entidade,[Picture])
@@ -48,12 +47,12 @@ pieceToPic (Vazio,pics) = Blank
 -- | Função que desenha uma linha do mapa.
 drawLine :: ([Bloco],[Picture]) -> Int -> [Picture]
 drawLine ([],_) _ = []
-drawLine (h:t,pics) x = Translate (fromIntegral (x*16)) 0 (pieceToPic (h,pics)):drawLine (t,pics) (x+1)
+drawLine (h:t,pics) x = Translate (fromIntegral (x* round l)) 0 (pieceToPic (h,pics)):drawLine (t,pics) (x+1)
 
 -- | Função que desenha o mapa.
 drawMap :: (Mapa,[Picture]) -> (Int,Int) -> [Picture]
 drawMap (Mapa _ _ [],_) _ = []
-drawMap (Mapa a b (h:t),pics) (x,y) = Translate 0 (fromIntegral (y*(-16))) (Pictures (drawLine (h,pics) x)):drawMap (Mapa a b t,pics) (x,y+1)
+drawMap (Mapa a b (h:t),pics) (x,y) = Translate 0 (fromIntegral (y*(- round l))) (Pictures (drawLine (h,pics) x)):drawMap (Mapa a b t,pics) (x,y+1)
 
 -- | Função que carrega as imagens necessárias para o jogo.
 carregaImagens :: IO [Picture]
@@ -69,12 +68,12 @@ mapaGrande =  Mapa ((20,-200),Oeste) (0,0)
                [Plataforma,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Plataforma],
                [Plataforma,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Plataforma],
                [Plataforma,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Plataforma],
-               [Plataforma,Plataforma,Plataforma,Plataforma,Plataforma,Vazio,Vazio,Vazio,Vazio,Vazio,Plataforma,Plataforma,Plataforma,Plataforma,Plataforma],
+               [Plataforma,Plataforma,Escada,Plataforma,Plataforma,Vazio,Vazio,Vazio,Vazio,Vazio,Plataforma,Plataforma,Escada,Plataforma,Plataforma],
                [Plataforma,Vazio,Escada,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Escada,Vazio,Plataforma],
                [Plataforma,Vazio,Escada,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Escada,Vazio,Plataforma],
                [Plataforma,Vazio,Escada,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Escada,Vazio,Plataforma],
                [Plataforma,Plataforma,Plataforma,Plataforma,Plataforma,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Escada,Vazio,Plataforma],
-               [Plataforma,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Plataforma,Plataforma,Plataforma,Plataforma,Plataforma,Plataforma],
+               [Plataforma,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Plataforma,Escada,Plataforma,Plataforma,Plataforma,Plataforma],
                [Plataforma,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Escada,Vazio,Vazio,Vazio,Plataforma],
                [Plataforma,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Escada,Vazio,Vazio,Vazio,Plataforma],
                [Plataforma,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Escada,Vazio,Vazio,Vazio,Plataforma],
@@ -82,13 +81,13 @@ mapaGrande =  Mapa ((20,-200),Oeste) (0,0)
                [Plataforma,Plataforma,Plataforma,Plataforma,Plataforma,Plataforma,Plataforma,Plataforma,Plataforma,Plataforma,Plataforma,Plataforma,Plataforma,Plataforma,Plataforma]]
 
 
+
 desenhaMapa :: Jogo -> [Picture] -> Jogador -> Inimigo -> Picture
 desenhaMapa (Jogo menu mapa mal colec jog) pics skin inimigo = translate (-120) 104 $ pictures (drawMap (mapa,pics) (0,0) ++ [desenhaJogador jog skin] ++ desenhaInimigo mal inimigo )
 
 
 mario :: Personagem
-mario = Personagem mov Jogador (40,-180) Oeste (16,16) False False 1 0 (False,0) gravidade
-
+mario = Personagem mov Jogador (40,-180) Oeste (12,12) False False 1 0 (False,0) 0
 
 malvados :: [Personagem]
-malvados = [Personagem 1 MacacoMalvado (100,26) Oeste (39,32) False True 1 0 (False,0) gravidade,Personagem 1 Fantasma (100,-204) Oeste (16,16) False True 1 0 (False,0) gravidade,Personagem 1 Fantasma (160,-204) Oeste (16,16) False True 1 0 (False,0) gravidade]
+malvados = [Personagem 1 MacacoMalvado (100,26) Oeste (39,32) False True 1 0 (False,0) 0,Personagem 1 Fantasma (100,-204) Oeste (16,16) False True 1 0 (False,0) 0,Personagem 1 Fantasma (160,-204) Oeste (16,16) False True 1 0 (False,0) 0]
