@@ -53,8 +53,8 @@ reageEventoGloss evento (estadoInicial,keys, z,skin, inimigo) = (estadoInicial, 
 
 -- | Função para atualizar o estado do jogo.
 atualizaEstado :: Float -> EstadoGloss -> EstadoGloss
-atualizaEstado n (estadoInicial@(Jogo _ mapa ini _ mario), keys, z, skin, inimigo) = (aplicaListaKey keys (aplicaGravidade estadoInicial) colisoes, keys, z, skin, inimigo)
-    where colisoes= colisoesChao mapa mario || colisoesParede mapa mario || colisoesPersonagem ini mario
+atualizaEstado n (estadoInicial@(Jogo _ mapa ini _ mario), keys, z, skin, inimigo) = (aplicaListaKey keys (aplicaGravidade estadoInicial), keys, z, skin, inimigo)
+   -- where colisoes= colisoesChao mapa mario || colisoesParede mapa mario || colisoesPersonagem ini mario
 
 
 -- | Função que atualiza o estado do jogo com base na tecla pressionada e no estado atual do jogo.
@@ -72,7 +72,7 @@ stageMenu k jogo = case menu jogo of
 
 -- | Função que muda a opção selecionada no menu
 mudaOP :: Opcao -> Opcao
-mudaOP op = case op of
+mudaOP op = case op of  
                Jogar -> Sair
                Sair -> Jogar
 

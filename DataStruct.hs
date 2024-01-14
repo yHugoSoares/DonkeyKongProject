@@ -12,7 +12,6 @@ data Bloco = Escada | Plataforma | Alcapao | Vazio deriving (Show,Eq,Read)
 -- | Tipo de dado que representa direções cardeais.
 data Direcao = Norte | Sul | Leste | Oeste deriving (Show,Eq,Ord)
 
-
 -- | Tipo de dado que representa opções de menu.
 data Opcao = Jogar | Sair deriving (Show,Eq,Ord)
 
@@ -38,7 +37,7 @@ velocidade :: Velocidade                --Um vetor de velocidade normal
 }
 -- | Gravidade
 gravidade :: Velocidade
-gravidade = 0.0
+gravidade = -1.0
 
 -- | Tamanho dos blocos
 type TBloco = Float

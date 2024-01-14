@@ -3,24 +3,13 @@ import DataStruct
 import Maps
 
 -- | Verifica colisões com paredes na direção especificada.
-colisoesParede :: Mapa -> Personagem -> Bool
-colisoesParede (Mapa _ _ mapa) Personagem {posicao = (x,y), direcao = dir} =
+colisoesParede :: Mapa -> Personagem -> Direcao -> Bool
+colisoesParede (Mapa _ _ mapa) Personagem {posicao = (x,y)} dir =
     case dir of 
         Oeste -> colisaoPlataforma (round ((x-16)/16),round (y/16))
         Leste -> colisaoPlataforma (round ((x+16)/16),round (y/16))
-        _ ->  False
-    where 
-        colisaoPlataforma coord = 
-            case obterValor mapa coord of
-                Plataforma -> True 
-                Alcapao -> True
-                Vazio -> False
-                Escada -> False
-
--- | Verifica colisões com o chão.
-colisoesChao :: Mapa -> Personagem -> Bool
-colisoesChao (Mapa _ _ mapa) Personagem {posicao = (x,y)} =
-         colisaoPlataforma (round (x/16),round ((y+16)/16)) || colisaoPlataforma (round (x/16),round ((y-16)/16))
+        Norte -> colisaoPlataforma (round (x/16),round ((y+16)/16))
+        Sul   -> colisaoPlataforma (round (x/16),round ((y-16)/16))
     where 
         colisaoPlataforma coord = 
             case obterValor mapa coord of

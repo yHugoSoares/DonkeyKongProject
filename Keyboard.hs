@@ -12,41 +12,41 @@ reactKey (EventKey key Up _ _)   = delete key
 reactKey (EventKey key Down _ _) = (:) key
 reactKey _                      = id
 
-aplicaListaKey :: [Key] -> Jogo -> Bool -> Jogo
-aplicaListaKey [] j _          = j
-aplicaListaKey (h:t) e b = aplicaListaKey t (aplicaKey h e b) b
+aplicaListaKey :: [Key] -> Jogo -> Jogo
+aplicaListaKey [] j          = j
+aplicaListaKey (h:t) e = aplicaListaKey t (aplicaKey h e) 
 
-aplicaKey :: Key -> Jogo -> Bool -> Jogo
-aplicaKey k j True                     = colisao k j 
-aplicaKey (SpecialKey KeyUp) j _       = jogada Norte j
-aplicaKey (SpecialKey KeyDown) j _     = jogada Sul j
-aplicaKey (SpecialKey KeyLeft) j _     = jogada Oeste j
-aplicaKey (SpecialKey KeyRight) j _    = jogada Leste j
-aplicaKey _ j _                        = j
+aplicaKey :: Key -> Jogo -> Jogo             
+aplicaKey (SpecialKey KeyUp) j@(Jogo _ _ _ _ p)        = if colisoesParede (mapa j) p Norte then j else jogada Norte j
+aplicaKey (SpecialKey KeyDown) j@(Jogo _ _ _ _ p)      = if colisoesParede (mapa j) p Sul then j else jogada Sul j
+aplicaKey (SpecialKey KeyLeft) j@(Jogo _ _ _ _ p)      = if colisoesParede (mapa j) p Oeste then j else jogada Oeste j
+aplicaKey (SpecialKey KeyRight) j@(Jogo _ _ _ _ p)     = if colisoesParede (mapa j) p Leste then j else jogada Leste j
+aplicaKey _ j                         = j
 
-colisao :: Key -> Jogo -> Jogo
-colisao k (Jogo menu mapa ini colec jog) = Jogo menu mapa ini colec (alteraColisao k jog parede chao personagem)
-                where parede = colisoesParede mapa jog 
-                      chao = colisoesChao mapa jog 
-                      personagem = colisoesPersonagem ini jog
-
-alteraColisao :: Key -> Personagem -> Bool -> Bool -> Bool -> Personagem
-alteraColisao k (Personagem velo a (x,y) dire c f d h i j g) parede chao pe 
+{-aplicaKey k@(SpecialKey KeyUp) j _       = jogada Norte j
+aplicaKey k@(SpecialKey KeyDown) j _       = jogada Sul j
+aplicaKey k@(SpecialKey KeyLeft) j _       = jogada Oeste j
+aplicaKey k@(SpecialKey KeyRight) j _      = jogada Leste j
+aplicaKey _ j _ = j-}
 
 
+plataformaNaFrente :: Mapa -> Posicao -> Direcao -> Bool
+plataformaNaFrente (Mapa _ _ mapa) (x, y) direcao =
+  case direcao of
+    Oeste -> isPlataforma (round ((x-16)/16),round (y/16))
+    Leste -> isPlataforma (round ((x+16)/16),round (y/16))
+    Norte -> isPlataforma (round (x/16),round ((y+16)/16))
+    Sul   -> isPlataforma (round (x/16),round ((y-16)/16))
+  where
+    isPlataforma (col, row) =
+      case obterValor mapa (col, row) of
+        Plataforma -> True
+        _          -> False                         
 
-
-
-
-                                                                         |parede && chao && (dire == Leste || dire == Sul) = Personagem velo a (x-velo,y+velo) dire c f d h i j g
-                                                                         |parede && chao && (dire == Oeste || dire == Sul) = Personagem velo a (x+velo,y+velo) dire c f d h i j g
-                                                                         |parede && (dire == Oeste) = Personagem velo a (x+velo,y) dire c f d h i j g
-                                                                         |parede && (dire == Leste) = Personagem velo a (x-velo,y) dire c f d h i j g
-                                                                         |chao  && (dire == Sul) = Personagem velo a (x,y+velo) dire c f d h i j g
-                                                                         |chao && (dire == Norte) = Personagem velo a (x,y-velo) dire c f d h i j g
-                                                                         |chao && (dire == Sul) && (dire == Oeste || dire == Leste) = Personagem velo a (x,y+velo) dire c f d h i j g
-                                                                         |chao && (dire == Norte) && (dire == Oeste || dire == Leste) = Personagem velo a (x,y-velo) dire c f d h i j g
-                                                                         |otherwise = Personagem velo a (x,y-velo) dire c f d h i j g
+{-aplicaColisao :: Key -> Jogo -> Jogo
+aplicaColisao k j@(Jogo _ _ _ _ jog@(Personagem {posicao = (x,y)})) = 
+                case k of 
+                    (SpecialKey KeyUp) -> j-}
 
 
 jogada ::Direcao -- A 'Jogada' a efetuar.
@@ -57,7 +57,7 @@ jogada d (Jogo menu m ini colec jo) = Jogo menu m ini colec (playerNovo jo)
                                                      playerNovo jo = alteraJogada jo d (Jogo menu m ini colec jo)
 
 alteraJogada :: Personagem -> Direcao -> Jogo -> Personagem
-alteraJogada (Personagem velo a (x,y) dire c f n h i j g) d e |d == Norte   = Personagem velo a (x,y+jump) Norte c f n h i j g
-                                                            |d == Sul       = Personagem velo a (x,y-jump) Sul c f n h i j g
-                                                            |d == Oeste     = Personagem velo a (x-velo,y) Oeste c f n h i j g
-                                                            |d == Leste     = Personagem velo a (x+velo,y) Leste c f n h i j g
+alteraJogada p@(Personagem {posicao = (x,y), velocidade = velo}) d e |d == Norte     = p {posicao =(x,y+jump)}
+                                                                     |d == Sul       = p {posicao =(x,y-jump)}
+                                                                     |d == Oeste     = p {posicao =(x-velo,y)}
+                                                                     |d == Leste     = p {posicao =(x+velo,y)}
