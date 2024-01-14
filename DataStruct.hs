@@ -1,4 +1,10 @@
--- | Módulo que contém as estruturas de dados principais do jogo.
+{-|
+Module : Main
+Description : Modulo Haskell Gloss DataStruct
+Copyright : Hugo Soares (a107293)
+            Henrique Brito (a107378)
+Módulo que contém as estruturas de dados principais do jogo.
+-}
 module DataStruct where
 
 -- |Datas do Jogo

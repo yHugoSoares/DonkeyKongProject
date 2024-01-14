@@ -9,7 +9,7 @@ import Main
 mapa01 :: Mapa
 mapa01 =
   Mapa
-    ((8.5, 6.5), Este)
+    ((8.5, 6.5), Leste)
     (5, 1.5)
     [ [Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio],
       [Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio],
@@ -27,10 +27,10 @@ mapa01 =
 
 inimigoModelo =
   Personagem
-    { velocidade = (0.0, 0.0),
+    { velocidade = 0,
       tipo = Fantasma,
       posicao = (4, 7.4),
-      direcao = Este,
+      direcao = Leste,
       tamanho = (1, 1),
       emEscada = False,
       ressalta = True,
@@ -41,7 +41,7 @@ inimigoModelo =
 
 jogadorParado =
   Personagem
-    { velocidade = (0.0, 0.0),
+    { velocidade = 0,
       tipo = Jogador,
       posicao = (8.5, 6.5),
       direcao = Oeste,
@@ -68,7 +68,7 @@ teste01 = "T01: Jogo que respeita todas as regras é válido" ~: True ~=? valida
 mapa02 :: Mapa
 mapa02 =
   Mapa
-    ((8.5, 6.5), Este)
+    ((8.5, 6.5), Leste)
     (5, 1.5)
     [ [Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio],
       [Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio],
@@ -105,7 +105,7 @@ teste06 = "T06: Os fantasmas começam com 1 vida" ~: False ~=? valida jogo01 {in
 mapa03 :: Mapa
 mapa03 =
   Mapa
-    ((8.5, 6.5), Este)
+    ((8.5, 6.5), Leste)
     (5, 1.5)
     [ [Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio],
       [Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio],
