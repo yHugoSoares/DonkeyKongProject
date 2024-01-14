@@ -43,7 +43,7 @@ j3 = Jogo mapaGrande [] [c1] pl2
 
 j4 = Jogo mapaGrande [] [] (pl2 {aplicaDano = (True, 10.0)})
 
-teste2A = "T2A: Jogador apanha martelo e a flag fica True." ~: True ~=? (fst . aplicaDano . jogador $ movimenta 100 1.0 j3) 
+teste2A = "T2A: Jogador apanha martelo e a flag fica True." ~: True ~=? (fst . aplicaDano . jogador $ movimenta 100 1.0 j3)
 teste2B = "T2B: Jogador apanha martelo e o tempo restante é maior que zero." ~: True ~=? (snd . aplicaDano . jogador $ movimenta 100 1.0 j3) > 0
 
 pl3 = Personagem (0.0,0.0) Jogador (3.5,4) Oeste (0.8,0.8) True False 10 0 (False, 0.0)
@@ -80,7 +80,7 @@ blocos2 = [ [ Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vaz
 gameMap2 :: Mapa
 gameMap2 = Mapa ((8.5, 6.5), Este) (5, 1.5) blocos2
 
-teste5 = "T5: Alcapao e removido por jogador mas nao pelo inimigo." ~: gameMap2 ~=? (mapa $ movimenta 100 1.0 j7)
+teste5 = "T5: Alcapao e removido por jogador mas nao pelo inimigo." ~: gameMap2 ~=? mapa (movimenta 100 1.0 j7)
 
 pl6 = Personagem (0.0,0.0) Jogador (5,1) Oeste (1,1) False False 10 0 (False, 0.0)
 c2 = (Moeda, (5,1))

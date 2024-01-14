@@ -49,7 +49,7 @@ jogada a (Jogo menu m ini colec jo) = Jogo menu m ini colec (playerNovo jo)
 
 alteraJogada :: Personagem -> Maybe Acao -> Jogo -> Personagem
 alteraJogada p@(Personagem {posicao = (x,y), velocidade = velo}) a e |a == Just Saltar              = p {posicao =(x,y+jump)}
-                                                                     |a == Just Subir               = p {posicao =(x,y+velo}
+                                                                     |a == Just Subir               = p {posicao =(x,y+velo)}
                                                                      |a == Just Descer              = p {posicao =(x,y-velo)}
                                                                      |a == Just AndarEsquerda       = p {posicao =(x-velo,y),direcao = Oeste}
                                                                      |a == Just AndarDireita        = p {posicao =(x+velo,y),direcao = Leste}
