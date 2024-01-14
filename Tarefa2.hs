@@ -1,3 +1,13 @@
+{-|
+Module : Tarefa 2
+Description : Modulo Haskell Gloss Tarefa2
+Copyright : Hugo Soares (a107293)
+            Henrique Brito (a107378)
+Validação do mapa.
+O objectivo desta tarefa é implementar a função
+valida :: Jogo -> Bool
+A função valida deve verificar que um dado jogo não viola nenhuma das restrições defenidas.
+-}
 module Tarefa2 where
 
 import Maps 

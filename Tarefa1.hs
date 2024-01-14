@@ -1,3 +1,13 @@
+{-|
+Module : Tarefa1
+Description : Modulo Haskell Gloss Tarefa1
+Copyright : Hugo Soares (a107293)
+            Henrique Brito (a107378)
+Deteção de colisões.
+O objectivo desta tarefa é implementar o par de funções
+colisoesParede :: Mapa -> Personagem -> Bool
+colisoesPersonagens :: Personagem -> Personagem -> Bool
+-}
 module Tarefa1 where
 import DataStruct
 import Maps
