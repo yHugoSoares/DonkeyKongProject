@@ -54,3 +54,13 @@ alteraJogada p@(Personagem {posicao = (x,y), velocidade = velo}) a e |a == Just 
                                                                      |a == Just AndarEsquerda       = p {posicao =(x-velo,y),direcao = Oeste}
                                                                      |a == Just AndarDireita        = p {posicao =(x+velo,y),direcao = Leste}
 
+colisaoEscada :: Mapa -> Personagem -> Bool
+colisaoEscada map@(Mapa a b mapa) p@Personagem {posicao = (x,y)} = 
+                    case (obterValor mapa (round (x/16),round (y+16/16)),obterValor mapa (round (x/16),round (y/16)),obterValor mapa (round (x/16),round (y-16/16))) of
+                            (Escada,Escada,Escada) -> True
+                            (Plataforma,Escada,Escada) -> True
+                            (Escada,Plataforma,_) -> True
+                            (_,Escada,_) -> True
+                            (Escada,Vazio,_) -> True
+                            (_,_,Escada) -> True
+                            (_,_,_) -> False
