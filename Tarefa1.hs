@@ -37,14 +37,7 @@ colisoesPersonagens mario inimigos@(ini:resto) = colisoesPersonagem mario ini ||
 
 -- | Verifica colisões entre dois personagens.
 colisoesPersonagem :: Personagem -> Personagem -> Bool
-colisoesPersonagem (Personagem {tamanho = (a1,b1), posicao = (x1,y1)}) Personagem {tamanho = (a2,b2), posicao = (x2,y2)} = 
-       {- case dir of 
-            Oeste -> not (x1 + (a1/2) < x2 - a2) || colisoesPersonagem t mario dir
-            Leste -> not (x2 + (a2/2) < x1 - a1) || colisoesPersonagem t mario dir
-            Norte -> not (y1 + (b1/2) < y2 - (b2/2)) || colisoesPersonagem t mario dir
-            Sul -> not (y2 + (b2/2) < y1 - (a1/2))   || colisoesPersonagem t mario dir-}
-   
-   
+colisoesPersonagem (Personagem {tamanho = (a1,b1), posicao = (x1,y1)}) Personagem {tamanho = (a2,b2), posicao = (x2,y2)} =  
    not (x1 + (a1/2) < x2 - (a2/2)|| x2 + (a2/2) < x1 - (a1/2) || y1 + (b1/2) < y2 - (b2/2)|| y2 + (b2/2) < y1 - (a1/2)) 
 
 
