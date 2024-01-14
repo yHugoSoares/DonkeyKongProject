@@ -1,3 +1,4 @@
+
 module Tarefa1 where
 import DataStruct
 import Maps
