@@ -8,8 +8,8 @@ import Keyboard
 import Maps
 import Tarefa1
 
-gravidade :: Float
-gravidade = -5.0
+gravidade :: Float ->
+gravidade = -10.0
 
 atualizaPersonagem :: Float -> Personagem -> Personagem
 atualizaPersonagem dt personagem =
