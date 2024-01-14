@@ -35,14 +35,21 @@ velocidade :: Velocidade                --Um vetor de velocidade normal
 , aplicaDano :: (Bool, Double)          --Indica se tem o martelo armado e por quanto tempo ainda. Quando ativo, cria uma hitbox à frente do jogador (com as dimensoes do jogador) e qualquer inimigo que encoste sofre dano
 , velocidadeVertical :: Velocidade
 }
+
+type HitBox = (Int,Int)
+
+type Semente = Int
+
+type Tempo = Int
+
 -- | Gravidade
 gravidade :: Velocidade
-gravidade = -1.0
+gravidade = -0.5
 
 -- | Tamanho dos blocos
 type TBloco = Float
 l :: TBloco                  
-l = 16
+l = 32
 
 -- | Alias de tipo representando a velocidade.
 type Velocidade = Float
@@ -64,10 +71,10 @@ data Jogo = Jogo
 
 -- | Constante representando a velocidade de movimento dos personagens.
 mov :: Float
-mov = 3 
+mov = 4 
 
 -- | Constante representando a altura do salto para os personagens.
 jump :: Float
-jump = 10
+jump = 35
 
 

@@ -19,14 +19,14 @@ import Graphics.Gloss
 import Graphics.Gloss.Interface.Pure.Game
 import Graphics.Gloss.Data.Bitmap
 import DataStruct
-import Keyboard ( aplicaListaKey, reactKey )
+import Keyboard
 import Maps
 import Tarefa1
 import Tarefa3
 
 -- | Taxa de quadros por segundo do jogo.
 fr :: Int
-fr = 25
+fr = 50
 
 -- | Configurações de exibição para a janela do jogo.
 dm :: Display
@@ -34,26 +34,27 @@ dm = FullScreen
 --dm = InWindow "Donkey Kong" (640, 640) (0, 0)
 
 -- | Alias de tipo para o estado do jogo.
-type EstadoGloss = (Jogo, [Key], [Picture], Jogador, Inimigo)
+type EstadoGloss = (Jogo, [Key], [Picture], Jogador, Inimigo, Itens)
 
 -- | Estado inicial do jogo.
 estadoInicial :: Jogo
-estadoInicial = Jogo (Opcoes Jogar) mapaGrande malvados [] mario  
+estadoInicial = Jogo (Opcoes Jogar) mapaGrande malvados colec mario  
 
 -- | Função para criar o estado inicial para o Gloss, que inclui uma lista de imagens.
-estadoGlossInicial :: [Picture] -> Jogador -> Inimigo -> EstadoGloss
-estadoGlossInicial z skin inimigo = (estadoInicial,[], z, skin, inimigo)
+estadoGlossInicial :: [Picture] -> Jogador -> Inimigo -> Itens -> EstadoGloss
+estadoGlossInicial z skin inimigo itens = (estadoInicial,[], z, skin, inimigo,itens)
 
 
 -- | Função para lidar com eventos no Gloss.
 reageEventoGloss :: Event -> EstadoGloss -> EstadoGloss
-reageEventoGloss evento@(EventKey k Down _ _) (jogo@(Jogo (Opcoes _) m mal b jo) ,keys, z,skin, inimigo) = (stageMenu k jogo, reactKey evento keys, z,skin, inimigo)
+reageEventoGloss evento@(EventKey k Down _ _) (jogo@(Jogo (Opcoes _) m mal b jo) ,keys, z,skin, inimigo, itens) = (stageMenu k jogo, reactKey evento keys, z,skin, inimigo,itens)
                                                                                              where op = menu estadoInicial
-reageEventoGloss evento (estadoInicial,keys, z,skin, inimigo) = (estadoInicial, reactKey evento keys, z,skin, inimigo)
+reageEventoGloss (EventKey (SpecialKey KeySpace) Down _ _) (j@(Jogo _ _ _ _ jog@(Personagem {posicao = (x,y)})),keys,z,skin,inimigo,itens) = (if colisoesParede (mapa j) jog Norte then j else jogada Norte j,keys,z,skin,inimigo,itens)
+reageEventoGloss evento (estadoInicial,keys, z,skin, inimigo,itens) = (estadoInicial, reactKey evento keys, z,skin, inimigo,itens)
 
 -- | Função para atualizar o estado do jogo.
 atualizaEstado :: Float -> EstadoGloss -> EstadoGloss
-atualizaEstado n (estadoInicial@(Jogo _ mapa ini _ mario), keys, z, skin, inimigo) = (aplicaListaKey keys (aplicaGravidade estadoInicial), keys, z, skin, inimigo)
+atualizaEstado n (estadoInicial@(Jogo _ mapa ini _ mario), keys, z, skin, inimigo,itens) = (aplicaListaKey keys (movimenta 10 10 estadoInicial), keys, z, skin, inimigo,itens)
    -- where colisoes= colisoesChao mapa mario || colisoesParede mapa mario || colisoesPersonagem ini mario
 
 
@@ -78,7 +79,7 @@ mudaOP op = case op of
 
 -- | Função que desenha o estado atual do jogo na tela usando a biblioteca Gloss.
 desenhaEstadoGloss :: EstadoGloss -> Picture
-desenhaEstadoGloss (Jogo (Opcoes op) _ _ _ _,_,_,_,_)  = drawOptions op
+desenhaEstadoGloss (Jogo (Opcoes op) _ _ _ _,_,_,_,_,_)  = drawOptions op
         where
         drawOptions op =   case op of
                     Jogar -> Pictures [Translate (-50) 10 $ Color blue $ drawOption "Jogar",
@@ -86,7 +87,7 @@ desenhaEstadoGloss (Jogo (Opcoes op) _ _ _ _,_,_,_,_)  = drawOptions op
                     Sair ->  Pictures [Color white $ Translate (-50) 10 $ drawOption "Jogar",
                        Color blue $ Translate (-50) (-70) $ drawOption "Sair"]
         drawOption option =  Scale 0.5 0.5 $ Text option
-desenhaEstadoGloss (estadoinicio@(Jogo ModoJogo _ _ _ _),keys, z,skin, inimigo) = desenhaMapa estadoinicio z skin inimigo
+desenhaEstadoGloss (estadoinicio@(Jogo ModoJogo _ _ _ _),keys, z,skin, inimigo, itens) = desenhaMapa estadoinicio z skin inimigo itens
         
 -- | Função principal que inicia o jogo.
 main :: IO ()
@@ -96,10 +97,12 @@ main = do
     marioLeste <- loadBMP "./img/Marioleste.bmp"
     macaco <- loadBMP "./img/macaco.bmp"
     fantasma <- loadBMP "./img/fantasma.bmp"
+    martelo <- loadBMP "./img/Hammer.bmp"
+    moeda <- loadBMP "./img/Hammer.bmp"
     play dm                             -- janela onde esta a decorrer
         (black)                         -- cor do fundo da janela
         fr                              -- framerate
-        (estadoGlossInicial loadMAPA (Jogador,[marioOeste,marioLeste]) [(MacacoMalvado,macaco),(Fantasma, fantasma)])    -- estado inicial
+        (estadoGlossInicial loadMAPA (Jogador,[marioOeste,marioLeste]) [(MacacoMalvado,macaco),(Fantasma, fantasma)] [(Martelo,martelo),(Moeda,moeda)])    -- estado inicial
         desenhaEstadoGloss              -- desenha o estado do jogo
         reageEventoGloss                -- reage a um evento
         atualizaEstado                  -- reage ao passar do tempo-}

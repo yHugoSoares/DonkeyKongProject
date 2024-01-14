@@ -13,6 +13,8 @@ type Jogador = (Entidade,[Picture])
 -- | Tipo representando um inimigo com sua aparência.
 type Inimigo = [(Entidade,Picture)]
 
+type Itens = [(Colecionavel,Picture)]
+
 -- | Tipo representando uma lista de imagens.
 type PictureM = [Picture]
 
@@ -22,9 +24,9 @@ desenhaJogador (Personagem _ _ (i,j) d _ _ _ _ _ _ _) skin = desenhoJogador i j 
 
 -- | Função que desenha o jogador no ambiente de acordo com sua aparência.
 desenhoJogador :: Float -> Float -> Direcao -> Jogador-> Picture
-desenhoJogador i j d (_,[marioO,marioL]) | d == Oeste = Translate i j  marioO
-                                         | d == Leste = Translate i j  marioL
-                                         |otherwise = Translate i j marioO
+desenhoJogador i j d (_,[marioO,marioL]) | d == Oeste = scale 2 2 $ Translate i j  marioO
+                                         | d == Leste = scale 2 2 $ Translate i j  marioL
+                                         |otherwise = scale 2 2 $ Translate i j marioO
 
 -- | Função que desenha os inimigos no ambiente.
 desenhaInimigo :: [Personagem] -> Inimigo -> [Picture]
@@ -34,15 +36,25 @@ desenhaInimigo _ _                                               = []
 
 -- | Função que desenha um inimigo no ambiente de acordo com sua aparência.
 desenhoInimigo :: Float -> Float -> Entidade -> Inimigo -> Picture
-desenhoInimigo i j tipo malvados = Translate i j image
+desenhoInimigo i j tipo malvados = scale 2 2 $ Translate i j image
         where image = (fromJust . lookup tipo) malvados
+
+-- | Função que desenha os colecionaveis no ambiente.
+desenhaColecionavel :: [(Colecionavel, Posicao)] -> Itens -> [Picture]
+desenhaColecionavel ((col,(x,y)):t) itens = desenhoColecionavel x y col itens : desenhaColecionavel t itens
+desenhaColecionavel _ _ = []
+
+-- | Função que desenha um colecionavel no ambiente de acordo com sua aparência.
+desenhoColecionavel :: Float -> Float -> Colecionavel -> Itens -> Picture
+desenhoColecionavel i j col itens = scale 3 3 $ Translate i j image
+        where image = (fromJust . lookup col) itens
 
 -- | Função que converte um bloco com sua aparência para uma imagem.
 pieceToPic :: (Bloco,[Picture]) -> Picture
-pieceToPic (Plataforma,pics) = pics !! 0
-pieceToPic (Escada,pics) = pics !! 1
-pieceToPic (Alcapao,pics) = pics !! 2
-pieceToPic (Vazio,pics) = Blank
+pieceToPic (Plataforma,pics) = scale 2 2 $ pics !! 0
+pieceToPic (Escada,pics) = scale 2 2 $ pics !! 1
+pieceToPic (Alcapao,pics) = scale 2 2 $ pics !! 2
+pieceToPic (Vazio,pics) = scale 2 2 $ Blank
 
 -- | Função que desenha uma linha do mapa.
 drawLine :: ([Bloco],[Picture]) -> Int -> [Picture]
@@ -63,31 +75,58 @@ carregaImagens = do plataforma <- loadBMP "./img/Platform.bmp"
 
 -- | Mapa utilizado no jogo.
 mapaGrande :: Mapa
-mapaGrande =  Mapa ((20,-200),Oeste) (0,0)
-              [[Plataforma,Plataforma,Plataforma,Plataforma,Plataforma,Plataforma,Plataforma,Plataforma,Plataforma,Plataforma,Plataforma,Plataforma,Plataforma,Plataforma,Plataforma],
-               [Plataforma,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Plataforma],
-               [Plataforma,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Plataforma],
-               [Plataforma,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Plataforma],
-               [Plataforma,Plataforma,Escada,Plataforma,Plataforma,Vazio,Vazio,Vazio,Vazio,Vazio,Plataforma,Plataforma,Escada,Plataforma,Plataforma],
-               [Plataforma,Vazio,Escada,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Escada,Vazio,Plataforma],
-               [Plataforma,Vazio,Escada,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Escada,Vazio,Plataforma],
-               [Plataforma,Vazio,Escada,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Escada,Vazio,Plataforma],
-               [Plataforma,Plataforma,Plataforma,Plataforma,Plataforma,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Escada,Vazio,Plataforma],
-               [Plataforma,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Plataforma,Escada,Plataforma,Plataforma,Plataforma,Plataforma],
-               [Plataforma,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Escada,Vazio,Vazio,Vazio,Plataforma],
-               [Plataforma,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Escada,Vazio,Vazio,Vazio,Plataforma],
-               [Plataforma,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Escada,Vazio,Vazio,Vazio,Plataforma],
-               [Plataforma,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Vazio,Escada,Vazio,Vazio,Vazio,Plataforma],
-               [Plataforma,Plataforma,Plataforma,Plataforma,Plataforma,Plataforma,Plataforma,Plataforma,Plataforma,Plataforma,Plataforma,Plataforma,Plataforma,Plataforma,Plataforma]]
+mapaGrande =  Mapa ((20,-200),Oeste) (0,0) mapa1
+type Matriz a = [[a]]
+
+mapa1 :: [[Bloco]]
+mapa1 =   stringParaMapa ["-------------------------",
+                          "-                       -",
+                          "-                       -",
+                          "-                       -",
+                          "----|--------------------",
+                          "-   |                   -",
+                          "-   |                   -",
+                          "-   |                   -",
+                          "-   |                   -",
+                          "--------------------|----",
+                          "-                   |   -",
+                          "-                   |   -",
+                          "-                   |   -",
+                          "-                   |   -",
+                          "--|----------------------",
+                          "- |                     -",
+                          "- |                     -",           
+                          "- |                     -",
+                          "- |                     -",
+                          "---------------------|---",
+                          "-                    |  -",
+                          "-                    |  -",
+                          "-                    |  -",
+                          "-                    |  -",
+                          "-------------------------"
+                          ]
+
+stringParaMapa :: Matriz Char -> [[Bloco]]
+stringParaMapa  =map  linha 
+  where
+    linha :: String -> [Bloco]
+    linha "" = []
+    linha (h:t)
+      | h == '-' = Plataforma : linha t
+      | h == ' ' = Vazio : linha t
+      | h == '=' = Alcapao : linha t
+      | h == '|' = Escada : linha t
 
 
-
-desenhaMapa :: Jogo -> [Picture] -> Jogador -> Inimigo -> Picture
-desenhaMapa (Jogo menu mapa mal colec jog) pics skin inimigo = translate (-120) 104 $ pictures (drawMap (mapa,pics) (0,0) ++ [desenhaJogador jog skin] ++ desenhaInimigo mal inimigo )
+desenhaMapa :: Jogo -> [Picture] -> Jogador -> Inimigo -> Itens -> Picture
+desenhaMapa (Jogo menu mapa mal colec jog) pics skin inimigo itens = translate (-400) 368 $ pictures (drawMap (mapa,pics) (0,0) ++ [desenhaJogador jog skin] ++ desenhaInimigo mal inimigo ++ desenhaColecionavel colec itens)
 
 
 mario :: Personagem
-mario = Personagem mov Jogador (40,-180) Oeste (12,12) False False 1 0 (False,0) 0
+mario = Personagem mov Jogador (70,-365) Leste (12,12) False False 1 0 (False,0) 0
 
 malvados :: [Personagem]
-malvados = [Personagem 1 MacacoMalvado (100,26) Oeste (39,32) False True 1 0 (False,0) 0,Personagem 1 Fantasma (100,-204) Oeste (16,16) False True 1 0 (False,0) 0,Personagem 1 Fantasma (160,-204) Oeste (16,16) False True 1 0 (False,0) 0]
+malvados = [Personagem 1 MacacoMalvado (100,26) Oeste (39,32) False True 1 0 (False,0) 0,Personagem 1 Fantasma (100,-288) Oeste (16,16) False True 1 0 (False,0) 0,Personagem 1 Fantasma (250,-205) Oeste (16,16) False True 1 0 (False,0) 0]
+
+colec :: [(Colecionavel, Posicao)]
+colec = [(Martelo,(70,-230)),(Moeda, (100,-160))]
