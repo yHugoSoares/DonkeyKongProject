@@ -2,6 +2,9 @@ module Tarefa2Spec (testesTarefa2) where
 
 import Tarefa2 (valida)
 import Test.HUnit
+import DataStruct
+import Maps
+import Main 
 
 mapa01 :: Mapa
 mapa01 =
