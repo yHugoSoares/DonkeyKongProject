@@ -4,7 +4,7 @@ import Maps
 import DataStruct 
 import Main
 import Tarefa1 
-import Keyboard 
+import Tarefa4 
 
 
 valida :: Jogo -> Bool

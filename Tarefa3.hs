@@ -12,6 +12,7 @@ movimenta semente tempo jogo =
             pegarColec = pegarcolecionaveis jogoGravidade
             jogoColide = bater pegarColec
 
+
 bater :: Jogo -> Jogo
 bater jogo@Jogo {jogador = mario@Personagem {aplicaDano = (danoX, _), vida = v}, inimigos = (ini:resto)} = 
           case (colisaohitbox mario ini,colisoesPersonagem mario ini ) of
@@ -60,8 +61,8 @@ atualizarEstadoJogador jogo@Jogo {colecionaveis = ((colec,pItem):t), jogador = p
     (jogoAtualizado, personagemAtualizado)
     where (jogoAtualizado, personagemAtualizado) = case colec of 
             Moeda -> (jogo { colecionaveis = t }, p {pontos = ponto+200})
-            Martelo -> (jogo { colecionaveis = t, jogador = updateP}, updateP)
-              where updateP =  p { aplicaDano = (True, 10), pontos = ponto}
+            Martelo -> (jogo { colecionaveis = t, jogador = pAtualizado}, pAtualizado)
+              where pAtualizado =  p { aplicaDano = (True, 10), pontos = ponto}
       
 movimentaInimigo :: Semente -> Tempo -> Personagem -> Personagem
 movimentaInimigo semente tempo ini@Personagem {direcao = dire, velocidade = v}= 

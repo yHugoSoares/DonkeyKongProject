@@ -19,7 +19,7 @@ import Graphics.Gloss
 import Graphics.Gloss.Interface.Pure.Game
 import Graphics.Gloss.Data.Bitmap
 import DataStruct
-import Keyboard
+import Tarefa4
 import Maps
 import Tarefa1
 import Tarefa3
@@ -49,12 +49,14 @@ estadoGlossInicial z skin inimigo itens = (estadoInicial,[], z, skin, inimigo,it
 reageEventoGloss :: Event -> EstadoGloss -> EstadoGloss
 reageEventoGloss evento@(EventKey k Down _ _) (jogo@(Jogo (Opcoes _) m mal b jo) ,keys, z,skin, inimigo, itens) = (stageMenu k jogo, reactKey evento keys, z,skin, inimigo,itens)
                                                                                              where op = menu estadoInicial
-reageEventoGloss (EventKey (SpecialKey KeySpace) Down _ _) (j@(Jogo _ _ _ _ jog@(Personagem {posicao = (x,y)})),keys,z,skin,inimigo,itens) = (if colisoesParede (mapa j) jog Norte then j else jogada Norte j,keys,z,skin,inimigo,itens)
+reageEventoGloss (EventKey (SpecialKey KeySpace) Down _ _) (j@(Jogo _ _ _ _ jog@(Personagem {posicao = (x,y)})),keys,z,skin,inimigo,itens) = (if colisoesParede (mapa j) jog Norte then j else jogada (Just Saltar) j,keys,z,skin,inimigo,itens)
 reageEventoGloss evento (estadoInicial,keys, z,skin, inimigo,itens) = (estadoInicial, reactKey evento keys, z,skin, inimigo,itens)
 
 -- | Função para atualizar o estado do jogo.
 atualizaEstado :: Float -> EstadoGloss -> EstadoGloss
-atualizaEstado n (estadoInicial@(Jogo _ mapa ini _ mario), keys, z, skin, inimigo,itens) = (aplicaListaKey keys (movimenta 10 10 estadoInicial), keys, z, skin, inimigo,itens)
+atualizaEstado n (estadoInicial@(Jogo _ mapa ini _ mario@Personagem {posicao = (x,y)}), keys, z, skin, inimigo,itens) 
+      |x > 650 && y > -90 =(estadoInicial {menu = VenceuJogo},keys, z, skin, inimigo, itens)
+      |otherwise = (aplicaListaKey keys (movimenta 10 10 estadoInicial), keys, z, skin, inimigo,itens)
    -- where colisoes= colisoesChao mapa mario || colisoesParede mapa mario || colisoesPersonagem ini mario
 
 
@@ -77,17 +79,30 @@ mudaOP op = case op of
                Jogar -> Sair
                Sair -> Jogar
 
+-- | Desenha menu vitória
+drawVitoria :: Picture
+drawVitoria = Pictures [scale 2 2 $ Translate (-200) 50 $ Color red $ text "Donkey Kong"
+                                                ,Translate (-50) (-30) $ Color blue $ text "Jogar",
+                                                 Translate (-50) (-120) $ Color white $ text "Sair"]
+   
+   {-Pictures [
+   Translate (-200) 0 $ Color red $ scale 0.2 0.2 $ text "Ganhou em segundos",
+   Translate 100 (-160) $ scale 0.1 0.1 $ text "Press Enter para continuar"]-}
+
 -- | Função que desenha o estado atual do jogo na tela usando a biblioteca Gloss.
 desenhaEstadoGloss :: EstadoGloss -> Picture
-desenhaEstadoGloss (Jogo (Opcoes op) _ _ _ _,_,_,_,_,_)  = drawOptions op
+desenhaEstadoGloss (Jogo {menu = VenceuJogo},_,_,_,_,_) = drawVitoria
+desenhaEstadoGloss (Jogo {menu = Opcoes op},_,_,_,_,_)  = drawOptions op
         where
         drawOptions op =   case op of
-                    Jogar -> Pictures [Translate (-50) 10 $ Color blue $ drawOption "Jogar",
-                       Translate (-50) (-70) $ Color white $ drawOption "Sair"]
-                    Sair ->  Pictures [Color white $ Translate (-50) 10 $ drawOption "Jogar",
-                       Color blue $ Translate (-50) (-70) $ drawOption "Sair"]
+                    Jogar -> Pictures [scale 2 2 $ Translate (-200) 50 $ Color red $ drawOption "Donkey Kong"
+                                                ,Translate (-50) (-30) $ Color blue $ drawOption "Jogar",
+                                                 Translate (-50) (-120) $ Color white $ drawOption "Sair"]
+                    Sair ->  Pictures [scale 2 2 $ Translate (-200) 50 $ Color red $ drawOption "Donkey Kong",
+                                                Color white $ Translate (-50) (-30) $ drawOption "Jogar",
+                                                Color blue $ Translate (-50) (-120) $ drawOption "Sair"]
         drawOption option =  Scale 0.5 0.5 $ Text option
-desenhaEstadoGloss (estadoinicio@(Jogo ModoJogo _ _ _ _),keys, z,skin, inimigo, itens) = desenhaMapa estadoinicio z skin inimigo itens
+desenhaEstadoGloss (estadoinicio@(Jogo ModoJogo _ _ _ p@Personagem {posicao = (x,y)}),keys, z,skin, inimigo, itens) = desenhaMapa estadoinicio z skin inimigo itens
         
 -- | Função principal que inicia o jogo.
 main :: IO ()
@@ -99,10 +114,12 @@ main = do
     fantasma <- loadBMP "./img/fantasma.bmp"
     martelo <- loadBMP "./img/Hammer.bmp"
     moeda <- loadBMP "./img/coin.bmp"
-    play dm                             -- janela onde esta a decorrer
-        (black)                         -- cor do fundo da janela
+    estrela <- loadBMP "./img/star.bmp"
+    play  
+        dm                              -- janela onde esta a decorrer
+        black                           -- cor do fundo da janela
         fr                              -- framerate
-        (estadoGlossInicial loadMAPA (Jogador,[marioOeste,marioLeste]) [(MacacoMalvado,macaco),(Fantasma, fantasma)] [(Martelo,martelo),(Moeda,moeda)])    -- estado inicial
+        (estadoGlossInicial loadMAPA (Jogador,[marioOeste,marioLeste]) [(MacacoMalvado,macaco),(Fantasma, fantasma)] [(Martelo,martelo),(Moeda,moeda),(Estrela,estrela)])    -- estado inicial
         desenhaEstadoGloss              -- desenha o estado do jogo
         reageEventoGloss                -- reage a um evento
         atualizaEstado                  -- reage ao passar do tempo-}

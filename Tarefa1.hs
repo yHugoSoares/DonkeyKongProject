@@ -45,4 +45,8 @@ colisoesPersonagem (Personagem {tamanho = (a1,b1), posicao = (x1,y1)}) Personage
             Sul -> not (y2 + (b2/2) < y1 - (a1/2))   || colisoesPersonagem t mario dir-}
    
    
-   not (x1 + (a1/2) < x2 - (a2/2)|| x2 + (a2/2) < x1 - (a1/2) || y1 + (b1/2) < y2 - (b2/2)|| y2 + (b2/2) < y1 - (a1/2))
+   not (x1 + (a1/2) < x2 - (a2/2)|| x2 + (a2/2) < x1 - (a1/2) || y1 + (b1/2) < y2 - (b2/2)|| y2 + (b2/2) < y1 - (a1/2)) 
+
+
+
+

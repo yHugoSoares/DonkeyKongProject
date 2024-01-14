@@ -49,6 +49,12 @@ desenhoColecionavel :: Float -> Float -> Colecionavel -> Itens -> Picture
 desenhoColecionavel i j col itens = scale 3 3 $ Translate i j image
         where image = (fromJust . lookup col) itens
 
+desenhaEstrela :: (Colecionavel,Posicao) -> Itens -> Picture
+desenhaEstrela _ [] = Blank
+desenhaEstrela (estrela,(x,y)) itens@((colec,pic):t) | estrela == colec = Translate x y pic  
+                                                     |otherwise = desenhaEstrela (estrela,(x,y)) t
+
+
 -- | Função que converte um bloco com sua aparência para uma imagem.
 pieceToPic :: (Bloco,[Picture]) -> Picture
 pieceToPic (Plataforma,pics) = scale 2 2 $ pics !! 0
@@ -119,14 +125,17 @@ stringParaMapa  =map  linha
 
 
 desenhaMapa :: Jogo -> [Picture] -> Jogador -> Inimigo -> Itens -> Picture
-desenhaMapa (Jogo menu mapa mal colec jog) pics skin inimigo itens = translate (-400) 368 $ pictures (drawMap (mapa,pics) (0,0) ++ [desenhaJogador jog skin] ++ desenhaInimigo mal inimigo ++ desenhaColecionavel colec itens)
+desenhaMapa (Jogo menu mapa mal colec jog) pics skin inimigo itens = translate (-400) 368 $ pictures (drawMap (mapa,pics) (0,0) ++ [desenhaJogador jog skin] ++ desenhaInimigo mal inimigo ++ desenhaColecionavel colec itens ++ [desenhaEstrela estrela itens])
 
 
 mario :: Personagem
 mario = Personagem mov Jogador (70,-365) Leste (12,12) False False 1 0 (False,0) 0
 
 malvados :: [Personagem]
-malvados = [Personagem 1 MacacoMalvado (100,26) Oeste (39,32) False True 1 0 (False,0) 0,Personagem 1 Fantasma (100,-288) Oeste (16,16) False True 1 0 (False,0) 0,Personagem 1 Fantasma (250,-205) Oeste (16,16) False True 1 0 (False,0) 0]
+malvados = [Personagem 1 MacacoMalvado (100,26) Oeste (39,32) False True 1 0 (True,1) 0,Personagem 1 Fantasma (100,-288) Oeste (16,16) False True 1 0 (True,1) 0,Personagem 1 Fantasma (250,-205) Oeste (16,16) False True 1 0 (True,1) 0]
+
+estrela :: (Colecionavel,Posicao)
+estrela = (Estrela,(650,-90))
 
 colec :: [(Colecionavel, Posicao)]
-colec = [(Martelo,(70,-230)),(Moeda, (100,-160))]
+colec = [(Martelo,(70,-200)),(Moeda, (100,-160))]

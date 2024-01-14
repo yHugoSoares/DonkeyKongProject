@@ -36,6 +36,15 @@ velocidade :: Velocidade                --Um vetor de velocidade normal
 , velocidadeVertical :: Velocidade
 }
 
+-- | Type para açao
+data Acao
+    = Subir
+    | Descer
+    | AndarDireita
+    | AndarEsquerda
+    | Saltar
+    | Parar deriving (Eq,Show,Ord)
+
 type HitBox = (Int,Int)
 
 type Semente = Int
@@ -58,7 +67,7 @@ type Velocidade = Float
 data Entidade = Jogador | MacacoMalvado | Fantasma deriving (Show,Eq,Read)
 
 -- | Tipo de dado que representa colecionáveis no jogo.
-data Colecionavel = Martelo | Moeda deriving (Show,Eq,Read)
+data Colecionavel = Martelo | Moeda | Estrela deriving (Show,Eq,Read)
 
 -- | Tipo de dado que representa o estado geral do jogo.
 data Jogo = Jogo 
@@ -71,8 +80,10 @@ data Jogo = Jogo
 
 -- | Constante representando a velocidade de movimento dos personagens.
 mov :: Float
-mov = 3
+mov = 3 
 
 -- | Constante representando a altura do salto para os personagens.
 jump :: Float
-jump = 5
+jump = 25
+
+
