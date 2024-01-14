@@ -1,5 +1,5 @@
 {-|
-Module : Main
+Module : Data Struct
 Description : Modulo Haskell Gloss DataStruct
 Copyright : Hugo Soares (a107293)
             Henrique Brito (a107378)

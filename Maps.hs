@@ -1,5 +1,5 @@
 {-|
-Module : Main
+Module : Maps
 Description : Modulo Haskell Gloss Maps
 Copyright : Hugo Soares (a107293)
             Henrique Brito (a107378)
