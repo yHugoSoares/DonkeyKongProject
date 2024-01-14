@@ -1,5 +1,5 @@
 {-|
-Module : Tarefa1
+Module : Tarefa 1
 Description : Modulo Haskell Gloss Tarefa1
 Copyright : Hugo Soares (a107293)
             Henrique Brito (a107378)
