@@ -1,14 +1,3 @@
-{-|
-Module : Tarefa 3
-Description : Modulo Haskell Gloss Tarefa3
-Copyright : Hugo Soares (a107293)
-            Henrique Brito (a107378)
-Movimentaçãao de personagens
-O objectivo desta tarefa é implementar a função
-movimenta :: Semente -> Tempo -> Jogo -> Jogo
-A função movimenta deve animar todos os personagens, i.e. calcular as
-suas novas posições e respectivas consequências. 
--}
 module Tarefa3 where
 
 import DataStruct
@@ -61,7 +50,7 @@ pegarcolecionaveis jogo@Jogo {colecionaveis = colec, jogador = mario} =
               procuraMatriz l pItem /= procuraMatriz l (x+(larg/2),y) 
 
 procuraMatriz :: TBloco -> Posicao -> (Int,Int)
-procuraMatriz l (x,y) = (round (x/l), round (y/l))
+procuraMatriz l (x,y) = (round (x/16), round (y/16))
 
 checaProximo :: Jogo -> Bool
 checaProximo Jogo {jogador = Personagem {posicao = (x,y), aplicaDano = (d,tempo), tamanho = (larg,alt)}, colecionaveis = colec} =

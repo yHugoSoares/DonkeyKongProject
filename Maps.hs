@@ -1,10 +1,4 @@
-{-|
-Module : Maps
-Description : Modulo Haskell Gloss Maps
-Copyright : Hugo Soares (a107293)
-            Henrique Brito (a107378)
-Módulo contendo funções relacionadas ao desenho do mapa e personagens.
--}
+-- | Módulo contendo funções relacionadas ao desenho do mapa e personagens.
 module Maps where
 
 import DataStruct
@@ -135,7 +129,7 @@ desenhaMapa (Jogo menu mapa mal colec jog) pics skin inimigo itens = translate (
 
 
 mario :: Personagem
-mario = Personagem mov Jogador (70,-365) Leste (12,12) False False 1 0 (False,0) 0
+mario = Personagem mov Jogador (90,-365) Leste (12,12) False False 1 0 (False,0) 0
 
 malvados :: [Personagem]
 malvados = [Personagem 1 MacacoMalvado (100,26) Oeste (39,32) False True 1 0 (True,1) 0,Personagem 1 Fantasma (100,-288) Oeste (16,16) False True 1 0 (True,1) 0,Personagem 1 Fantasma (250,-205) Oeste (16,16) False True 1 0 (True,1) 0]
@@ -144,4 +138,4 @@ estrela :: (Colecionavel,Posicao)
 estrela = (Estrela,(650,-90))
 
 colec :: [(Colecionavel, Posicao)]
-colec = [(Martelo,(70,-200)),(Moeda, (100,-160))]
+colec = [(Martelo,(70,-190)),(Moeda, (100,-135))]

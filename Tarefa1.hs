@@ -1,15 +1,4 @@
-{-|
-Module : Tarefa1
-Description : Modulo Haskell Gloss Tarefa1
-Copyright : Hugo Soares (a107293)
-            Henrique Brito (a107378)
-Deteção de colisões.
-O objectivo desta tarefa é implementar o par de funções
-colisoesParede :: Mapa -> Personagem -> Bool
-colisoesPersonagens :: Personagem -> Personagem -> Bool
--}
 module Tarefa1 where
-
 import DataStruct
 import Maps
 
@@ -48,7 +37,7 @@ colisoesPersonagens mario inimigos@(ini:resto) = colisoesPersonagem mario ini ||
 
 -- | Verifica colisões entre dois personagens.
 colisoesPersonagem :: Personagem -> Personagem -> Bool
-colisoesPersonagem (Personagem {tamanho = (a1,b1), posicao = (x1,y1)}) Personagem {tamanho = (a2,b2), posicao = (x2,y2)} =  
+colisoesPersonagem (Personagem {tamanho = (a1,b1), posicao = (x1,y1)}) Personagem {tamanho = (a2,b2), posicao = (x2,y2)} = 
    not (x1 + (a1/2) < x2 - (a2/2)|| x2 + (a2/2) < x1 - (a1/2) || y1 + (b1/2) < y2 - (b2/2)|| y2 + (b2/2) < y1 - (a1/2)) 
 
 

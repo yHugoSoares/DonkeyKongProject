@@ -85,10 +85,6 @@ drawVitoria = Pictures [scale 2 2 $ Translate (-200) 50 $ Color red $ text "Donk
                                                 ,Translate (-50) (-30) $ Color blue $ text "Jogar",
                                                  Translate (-50) (-120) $ Color white $ text "Sair"]
    
-   {-Pictures [
-   Translate (-200) 0 $ Color red $ scale 0.2 0.2 $ text "Ganhou em segundos",
-   Translate 100 (-160) $ scale 0.1 0.1 $ text "Press Enter para continuar"]-}
-
 -- | Função que desenha o estado atual do jogo na tela usando a biblioteca Gloss.
 desenhaEstadoGloss :: EstadoGloss -> Picture
 desenhaEstadoGloss (Jogo {menu = VenceuJogo},_,_,_,_,_) = drawVitoria
